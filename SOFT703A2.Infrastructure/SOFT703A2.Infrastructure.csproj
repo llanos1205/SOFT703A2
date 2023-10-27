@@ -9,12 +9,9 @@
     <ItemGroup>
       <Folder Include="Contracts\ViewModels\Catalog\" />
       <Folder Include="Contracts\ViewModels\Troley\" />
-      <Folder Include="Contracts\ViewModels\User\" />
       <Folder Include="Persistence\Migrations\" />
       <Folder Include="ViewModels\Catalog\" />
-      <Folder Include="ViewModels\Product\" />
       <Folder Include="ViewModels\Troley\" />
-      <Folder Include="ViewModels\User\" />
     </ItemGroup>
 
     <ItemGroup>

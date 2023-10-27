@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SOFT703A2.Domain.Models;
+
 using SOFT703A2.Infrastructure.Contracts.Repositories;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Auth;
 
 namespace SOFT703A2.Infrastructure.ViewModels.Auth;
-
+using SOFT703A2.Domain.Models;
 public class RegisterViewModel:IRegisterViewModel
 {
     [Required]

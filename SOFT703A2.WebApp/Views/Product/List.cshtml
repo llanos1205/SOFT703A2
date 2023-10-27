@@ -1,0 +1,39 @@
+﻿@model SOFT703A2.Infrastructure.Contracts.ViewModels.Product.IListProductViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+
+<h2>Products</h2>
+<a href="@Url.Action("Add", "Product")" class="btn btn-primary">Add</a>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Photo Url</th>
+        <th>Stock</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var product in Model.Products)
+    {
+        <tr>
+            <td>@product.Name</td>
+            <td>
+                <img src="@product.Photo" width="100" height="100"/>
+            </td>
+            <td>@product.Stock</td>
+            <td>@product.Price</td>
+            <td>
+                <a href="@Url.Action("Detail", "Product", new { id = product.Id })" class="btn btn-primary">Edit</a>
+                <a href="@Url.Action("Delete", "Product", new { id = product.Id })" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
