@@ -80,8 +80,7 @@ public class ProductController : Controller
         return View(vm);
     }
 
-    [HttpPost]
-    [Authorize]
+
     public async Task<IActionResult> Delete(string id)
     {
         var result = await _createProductViewModel.Delete(id);
