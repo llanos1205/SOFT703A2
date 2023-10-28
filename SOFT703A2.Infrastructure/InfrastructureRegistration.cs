@@ -4,11 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using SOFT703A2.Domain.Models;
 using SOFT703A2.Infrastructure.Contracts.Repositories;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Auth;
+using SOFT703A2.Infrastructure.Contracts.ViewModels.Catalog;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Product;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.User;
 using SOFT703A2.Infrastructure.Persistence;
 using SOFT703A2.Infrastructure.Repositories;
 using SOFT703A2.Infrastructure.ViewModels.Auth;
+using SOFT703A2.Infrastructure.ViewModels.Catalog;
 using SOFT703A2.Infrastructure.ViewModels.Product;
 using SOFT703A2.Infrastructure.ViewModels.User;
 
@@ -48,5 +50,6 @@ public static class InfrastructureRegistration
         services.AddScoped<IListUserViewModel, ListUserViewModel>();
         services.AddScoped<IDetailUserViewModel, DetailUserViewModel>();
         services.AddScoped<ICreateUserViewModel, CreateUserViewModel>();
+        services.AddScoped<IMarketPlaceViewModel, MarketPlaceViewModel>();
     }
 }
