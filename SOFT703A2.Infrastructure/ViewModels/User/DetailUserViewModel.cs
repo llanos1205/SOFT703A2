@@ -42,7 +42,7 @@ public class DetailUserViewModel:IDetailUserViewModel
     }
     public async Task<bool> Find(string id)
     {
-        var user = await _userRepository.GetByIdAsync(id);
+        var user = await _userRepository.GetUserTrolleyTransaction(id);
         if (user != null)
         {
             this.Email = user.UserName;
