@@ -6,12 +6,14 @@ using SOFT703A2.Infrastructure.Contracts.Repositories;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Auth;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Catalog;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Product;
+using SOFT703A2.Infrastructure.Contracts.ViewModels.Trolley;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.User;
 using SOFT703A2.Infrastructure.Persistence;
 using SOFT703A2.Infrastructure.Repositories;
 using SOFT703A2.Infrastructure.ViewModels.Auth;
 using SOFT703A2.Infrastructure.ViewModels.Catalog;
 using SOFT703A2.Infrastructure.ViewModels.Product;
+using SOFT703A2.Infrastructure.ViewModels.Trolley;
 using SOFT703A2.Infrastructure.ViewModels.User;
 
 namespace SOFT703A2.Infrastructure;
@@ -51,5 +53,6 @@ public static class InfrastructureRegistration
         services.AddScoped<IDetailUserViewModel, DetailUserViewModel>();
         services.AddScoped<ICreateUserViewModel, CreateUserViewModel>();
         services.AddScoped<IMarketPlaceViewModel, MarketPlaceViewModel>();
+        services.AddScoped<ITrolleyViewModel, TrolleyViewModel>();
     }
 }

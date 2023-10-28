@@ -7,9 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Contracts\ViewModels\Troley\" />
       <Folder Include="Persistence\Migrations\" />
-      <Folder Include="ViewModels\Troley\" />
     </ItemGroup>
 
     <ItemGroup>

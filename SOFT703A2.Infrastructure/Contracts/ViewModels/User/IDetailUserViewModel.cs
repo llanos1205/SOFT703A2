@@ -9,7 +9,7 @@ public interface IDetailUserViewModel
     public string? LastName { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
-    public List<Trolley> Trolleys { get; set; }
+    public List<Domain.Models.Trolley>? Trolleys { get; set; }
     public Task<bool> Update();
     public Task<bool> Find(string id);
 }
