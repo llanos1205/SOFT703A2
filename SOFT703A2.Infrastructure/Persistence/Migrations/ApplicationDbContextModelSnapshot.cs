@@ -128,11 +128,52 @@ namespace SOFT703A2.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SOFT703A2.Domain.Models.Category", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("SOFT703A2.Domain.Models.Login", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("SessionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Login");
+                });
+
             modelBuilder.Entity("SOFT703A2.Domain.Models.Product", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoryId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsPromoted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -147,6 +188,8 @@ namespace SOFT703A2.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Product");
                 });
@@ -349,6 +392,28 @@ namespace SOFT703A2.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SOFT703A2.Domain.Models.Login", b =>
+                {
+                    b.HasOne("SOFT703A2.Domain.Models.User", "User")
+                        .WithMany("Logins")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SOFT703A2.Domain.Models.Product", b =>
+                {
+                    b.HasOne("SOFT703A2.Domain.Models.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("SOFT703A2.Domain.Models.ProductXTrolley", b =>
                 {
                     b.HasOne("SOFT703A2.Domain.Models.Product", "Product")
@@ -379,6 +444,11 @@ namespace SOFT703A2.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SOFT703A2.Domain.Models.Category", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("SOFT703A2.Domain.Models.Product", b =>
                 {
                     b.Navigation("ProductXTrolleys");
@@ -391,6 +461,8 @@ namespace SOFT703A2.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SOFT703A2.Domain.Models.User", b =>
                 {
+                    b.Navigation("Logins");
+
                     b.Navigation("Trolleys");
                 });
 #pragma warning restore 612, 618
