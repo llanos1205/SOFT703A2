@@ -1,10 +1,10 @@
-To setup the db do teh following:
+To setup the db do the following:
 
 1. Create a database called `SOFT703A2` in sqlserver
 2. Run from the root of the project:
 
 ``` 
-dotnet ef update --project SOFT703A2.Infrastructure --startup-project SOFT703A2.WebApp
+dotnet ef database update --project SOFT703A2.Infrastructure --startup-project SOFT703A2.WebApp
 ``` 
 
 To create new features:
