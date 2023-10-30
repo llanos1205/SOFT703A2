@@ -9,5 +9,6 @@ public class User: IdentityUser,IEntity
     public  string? LastName { get; set; }
     public  string? Phone { get; set; }
     public List<Trolley>? Trolleys { get; set; } 
+    public List<Login>? Logins { get; set; }
 
 }
