@@ -40,6 +40,7 @@ public static class InfrastructureRegistration
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ITrolleyRepository, TrolleyRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
     }
 
     private static void LoadViewModels(IServiceCollection services)

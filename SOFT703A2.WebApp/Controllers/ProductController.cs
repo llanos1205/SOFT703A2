@@ -52,8 +52,9 @@ public class ProductController : Controller
         return RedirectToAction("Detail");
     }
 
-    public IActionResult Add()
+    public async Task<IActionResult> Add()
     {
+        await _createProductViewModel.LoadCategories();
         return View(_createProductViewModel);
     }
 
@@ -67,6 +68,7 @@ public class ProductController : Controller
             _createProductViewModel.Photo = vm.Photo;
             _createProductViewModel.Price = vm.Price;
             _createProductViewModel.Stock = vm.Stock;
+            _createProductViewModel.SelectedCategory = vm.SelectedCategory;
             var result = await _createProductViewModel.Create();
             if (result)
             {
