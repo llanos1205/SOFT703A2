@@ -4,5 +4,6 @@ namespace SOFT703A2.Infrastructure.Contracts.Repositories;
 
 public interface IProductRepository: IBaseRepository<Product>
 {
-    public void donothing(){}
+    public Task<List<Product>> GetExtendedSearch(string name, bool byCategory, bool byPromoted);
+
 }

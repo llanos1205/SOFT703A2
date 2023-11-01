@@ -15,6 +15,7 @@ public class MarketPlaceController : Controller
         _marketPlaceViewModel = vm;
     }
 
+    [Authorize]
     public async Task<IActionResult> Index()
     {
         await _marketPlaceViewModel.GetAllAsync();
@@ -76,4 +77,30 @@ public class MarketPlaceController : Controller
         string trolleyJson = JsonSerializer.Serialize(_marketPlaceViewModel.CurrentTrolley, options);
         return Content(trolleyJson, "application/json");
     }
+
+    [HttpGet]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> FilterProducts(string productName, bool categoryCheckbox, bool promotedCheckbox)
+    {
+        try
+        {
+
+            await _marketPlaceViewModel.UpdateCatalog( productName,  categoryCheckbox,  promotedCheckbox);
+
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            };
+            string filteredProductsJson = JsonSerializer.Serialize(_marketPlaceViewModel.Catalog, options);
+
+            return Content(filteredProductsJson, "application/json");
+        }
+        catch (Exception ex)
+        {
+            // Handle any exceptions or errors as needed
+            return BadRequest("An error occurred while filtering products.");
+        }
+    }
+
 }

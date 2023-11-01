@@ -31,7 +31,8 @@ public class ProductController : Controller
         await _detailProductViewModel.Find(id);
         return View(_detailProductViewModel);
     }
-    public async Task<IActionResult> Update(string id,DetailProductViewModel vm)
+
+    public async Task<IActionResult> Update(string id, DetailProductViewModel vm)
     {
         if (ModelState.IsValid)
         {
@@ -49,6 +50,7 @@ public class ProductController : Controller
                 ModelState.AddModelError("", "Something went wrong");
             }
         }
+
         return RedirectToAction("Detail");
     }
 
@@ -96,6 +98,12 @@ public class ProductController : Controller
             ModelState.AddModelError("", "Something went wrong");
         }
 
+        return RedirectToAction("List");
+    }
+
+    public async Task<IActionResult> Promote(string id)
+    {
+        await _detailProductViewModel.Promote(id);
         return RedirectToAction("List");
     }
 }

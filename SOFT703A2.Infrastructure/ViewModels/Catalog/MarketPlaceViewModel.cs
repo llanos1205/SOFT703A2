@@ -33,6 +33,11 @@ public class MarketPlaceViewModel : IMarketPlaceViewModel
         CurrentTrolley = await _trolleyRepository.GetLatest(_userRepository.GetUserId());
     }
 
+    public async Task UpdateCatalog(string productName, bool byCategory, bool byPromoted)
+    {
+        Catalog = await _productRepository.GetExtendedSearch(productName, byCategory, byPromoted);
+    }
+
     public async Task AddToTrolley(string productId)
     {
         CurrentTrolley = await _trolleyRepository.GetLatest(_userRepository.GetUserId());
