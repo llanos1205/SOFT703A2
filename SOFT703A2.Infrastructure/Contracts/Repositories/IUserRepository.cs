@@ -12,5 +12,6 @@ public interface IUserRepository: IBaseRepository<User>
     Task<User?> GetUserTrolleyTransaction(string? id);
     Task SetRole(string email, string role);
     Task AddDefaultAsync(User user, string? password);
-   
+
+    Task<List<User>> GetExtendedSearch(string userName, bool byVisit, bool byEmail, bool byPhone);
 }

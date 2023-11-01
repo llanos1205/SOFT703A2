@@ -10,11 +10,11 @@
     var productDetailPath = '@Url.Action("Detail", "Product")'
     var productDeletePath = '@Url.Action("Delete", "Product")'
     var productPromotePath = '@Url.Action("Promote", "Product")'
+    var productUnPromotePath = '@Url.Action("UnPromote", "Product")'
 </script>
 <script src="/js/Product/List.js"></script>
 
 <h2>Products</h2>
-
 <div class="row">
     <!-- First Row: Product Search Bar and Button -->
     <div class="col-md-10">
@@ -30,7 +30,6 @@
     </div>
 </div>
 <div class="row">
-    <!-- Second Row: Checkboxes and Labels -->
     <div class="col-md-3">
         <div class="form-check">
             <input type="checkbox" class="form-check-input" id="categoryCheckbox">
@@ -57,6 +56,7 @@
             <th>Photo Url</th>
             <th>Stock</th>
             <th>Price</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -70,10 +70,19 @@
                 </td>
                 <td>@product.Stock</td>
                 <td>@product.Price</td>
+                <td>@product.Category.Name</td>
                 <td>
                     <a href="@Url.Action("Detail", "Product", new { id = product.Id })" class="btn btn-primary">Edit</a>
                     <a href="@Url.Action("Delete", "Product", new { id = product.Id })" class="btn btn-danger">Delete</a>
-                    <a href="@Url.Action("Promote", "Product", new { id = product.Id })" class="btn btn-primary">Promote</a>
+                    @if(product.IsPromoted)
+                    {
+                        <a href="@Url.Action("UnPromote", "Product", new { id = product.Id })" class="btn btn-warning">Demote</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Promote", "Product", new { id = product.Id })" class="btn btn-success">Promote</a>
+                       
+                    }
                 </td>
             </tr>
         }

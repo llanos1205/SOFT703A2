@@ -17,7 +17,7 @@ public class ListProductViewModel:IListProductViewModel
     }
     public async Task GetAll()
     {
-        Products = await _productRepository.GetAllAsync();
+        Products = await _productRepository.GetAllWithCategoriesAsync();
     }
 
     public Task GetByName(string name)

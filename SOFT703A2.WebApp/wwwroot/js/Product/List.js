@@ -4,21 +4,27 @@
         var tableBody = $('#product-table-body');
         tableBody.empty(); // Clear the existing product list
 
-        $.each(products.$values, function (index, product) {
+        $.each(products, function (index, product) {
             var detailUrl = productDetailPath + '/' + product.Id;
             var deleteUrl = productDeletePath + '/' + product.Id;
             var promoteUrl = productPromotePath + '/' + product.Id;
-
+            var unPromoteUrl = productUnPromotePath + '/' + product.Id;
             var row = '<tr>' +
                 '<td>' + product.Name + '</td>' +
                 '<td><img src="' + product.Photo + '" width="100" height="100" /></td>' +
                 '<td>' + product.Stock + '</td>' +
                 '<td>' + product.Price + '</td>' +
+                '<td>' + product.Category.Name + '</td>' +
                 '<td>' +
-                '<a href="' + detailUrl + '" class="btn btn-primary">Edit</a>' +
-                '<a href="' + deleteUrl + '" class="btn btn-danger">Delete</a>' +
-                '<a href="' + promoteUrl + '" class="btn btn-primary">Promote</a>' +
-                '</td>' +
+                '<a href="' + detailUrl + '" class="btn btn-primary">Edit</a>  ' +
+                '<a href="' + deleteUrl + '" class="btn btn-danger">Delete</a>  ';
+
+            if (product.IsPromoted) {
+                row += '<a href="' + unPromoteUrl + '" class="btn btn-warning">Demote</a>  ';
+            } else {
+                row += '<a href="' + promoteUrl + '" class="btn btn-success">Promote</a>';
+            }
+            row += '</td>' +
                 '</tr>';
             tableBody.append(row);
         });

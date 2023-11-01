@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SOFT703A2.Infrastructure.Contracts.Repositories;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Product;
 
@@ -16,13 +17,21 @@ public class DetailProductViewModel : IDetailProductViewModel
     public int Stock { get; set; }
     [Required]
     public double Price { get; set; }
+    [Required]
+    public bool IsPromoted { get; set; }
+    
+    public List<SelectListItem>? Categories { get; set; }
+    [Required] public string SelectedCategory { get; set; }
 
     private readonly IProductRepository _productRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public DetailProductViewModel(IProductRepository productRepository)
+    public DetailProductViewModel(IProductRepository productRepository, ICategoryRepository categoryRepository)
     {
         _productRepository = productRepository;
+        _categoryRepository = categoryRepository;
     }
+
 
     public DetailProductViewModel()
     {
@@ -36,6 +45,8 @@ public class DetailProductViewModel : IDetailProductViewModel
         product.Photo = this.Photo;
         product.Stock = this.Stock;
         product.Price = this.Price;
+        product.IsPromoted = this.IsPromoted;
+        product.CategoryId = this.SelectedCategory;
         var result = await _productRepository.UpdateAsync(product);
         return result != null;
     }
@@ -50,6 +61,8 @@ public class DetailProductViewModel : IDetailProductViewModel
             this.Stock = product.Stock;
             this.Price = product.Price;
             this.Id = product.Id;
+            this.IsPromoted = product.IsPromoted;
+            this.SelectedCategory = product.CategoryId;
             return true;
         }
 
@@ -62,5 +75,17 @@ public class DetailProductViewModel : IDetailProductViewModel
         product.IsPromoted = true;
         await _productRepository.UpdateAsync(product);
         
+    }
+
+    public async Task UnPromote(string id)
+    {
+        var product = await _productRepository.GetByIdAsync(id);
+        product.IsPromoted = false;
+        await _productRepository.UpdateAsync(product);
+    }
+    public async Task LoadCategories()
+    {
+        var categories = await _categoryRepository.GetAllAsync();
+        Categories = categories.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
     }
 }

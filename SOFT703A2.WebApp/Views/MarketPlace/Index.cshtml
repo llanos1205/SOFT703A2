@@ -18,7 +18,6 @@
 <div class="row">
     <div class="col-md-8">
         <div class="row">
-            <!-- First Row: Product Search Bar and Button -->
             <div class="col-md-11">
                 <div class="form-group">
                     <input type="text" id="productName" class="form-control" placeholder="Search by Name">
@@ -30,7 +29,6 @@
         </div>
 
         <div class="row">
-            <!-- Second Row: Checkboxes and Labels -->
             <div class="col-md-3">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="categoryCheckbox">
@@ -50,8 +48,6 @@
             </div>
         </div>
         <div class="row-md-1"></div>
-
-
         <!-- Catalog -->
         <div class="row" id="catalog-container">
             @foreach (var product in Model.Catalog)
@@ -61,6 +57,7 @@
                         <img src="@product.Photo" class="card-img-top" alt="Product Image" style="height: 190px;">
                         <div class="card-body">
                             <h6 class="card-title">@product.Name - $@product.Price</h6>
+                            <h7 class="card-title">@product.Category.Name</h7>
                         </div>
                         <a href="javascript:void(0);" class="btn btn-primary addFromCatalog" data-product-id="@product.Id">Add</a>
                     </div>

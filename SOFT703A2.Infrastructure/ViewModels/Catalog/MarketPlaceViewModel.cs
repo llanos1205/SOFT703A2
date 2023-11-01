@@ -29,7 +29,7 @@ public class MarketPlaceViewModel : IMarketPlaceViewModel
 
     public async Task GetAllAsync()
     {
-        Catalog = await _productRepository.GetAllAsync();
+        Catalog = await _productRepository.GetAllWithCategoriesAsync();
         CurrentTrolley = await _trolleyRepository.GetLatest(_userRepository.GetUserId());
     }
 
