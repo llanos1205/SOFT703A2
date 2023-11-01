@@ -19,6 +19,7 @@ public class ProductController : Controller
         _detailProductViewModel = detailProductViewModel;
     }
 
+    [Authorize]
     public async Task<IActionResult> List()
     {
         await _listProductViewModel.GetAll();

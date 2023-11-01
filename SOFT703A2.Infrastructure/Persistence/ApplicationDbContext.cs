@@ -11,6 +11,8 @@ public class ApplicationDbContext: IdentityDbContext<User, Role, string>
     public DbSet<Product> Product { get; set; }
     public DbSet<Trolley> Trolley { get; set; }
     public DbSet<ProductXTrolley> ProductXTrolley { get; set; }
+    public DbSet<Category> Category { get; set; }
+    public DbSet<Login> Login { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
     {
@@ -18,6 +20,17 @@ public class ApplicationDbContext: IdentityDbContext<User, Role, string>
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Login>()
+            .HasOne(l => l.User)
+            .WithMany(u => u.Logins)
+            .HasForeignKey(l => l.UserId)
+            .IsRequired();
+        
+        modelBuilder.Entity<Product>()
+            .HasOne(p => p.Category)
+            .WithMany(c => c.Products)
+            .HasForeignKey(p => p.CategoryId)
+            .IsRequired();
         modelBuilder.Entity<ProductXTrolley>()
             .HasKey(pt => new { pt.ProductId, pt.TrolleyId });
 
