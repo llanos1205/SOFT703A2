@@ -11,4 +11,5 @@ public interface IMarketPlaceViewModel
     public Task RemoveFromTrolley(string productId);
     public Task AddToTrolley(string productId);
     public Task GetAllAsync();
+    public Task UpdateCatalog(string productName, bool byCategory, bool byPromoted);
 }

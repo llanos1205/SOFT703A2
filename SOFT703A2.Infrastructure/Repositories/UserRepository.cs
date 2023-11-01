@@ -24,6 +24,14 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         if (user != null && await _userManager.CheckPasswordAsync(user, Password))
         {
             await _signInManager.SignInAsync(user, isPersistent: false);
+            await _context.Login.AddAsync(
+                new Login()
+                {
+                    SessionDate = DateTime.Now,
+                    UserId = user.Id
+                }
+            );
+            await _context.SaveChangesAsync();
             return true;
         }
 
@@ -36,6 +44,15 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         if (result.Succeeded)
         {
             await _signInManager.SignInAsync(user, isPersistent: false);
+            var foundUser = await _userManager.FindByEmailAsync(user.Email);
+            await _context.Login.AddAsync(
+                new Login()
+                {
+                    SessionDate = DateTime.Now,
+                    UserId = foundUser.Id
+                }
+            );
+            await _context.SaveChangesAsync();
             return true;
         }
 

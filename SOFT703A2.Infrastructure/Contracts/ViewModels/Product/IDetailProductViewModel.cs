@@ -9,4 +9,5 @@ public interface IDetailProductViewModel
     public double Price { get; set; }
     public Task<bool> Update(string id);
     public Task<bool> Find(string id);
+    public Task Promote(string id);
 }

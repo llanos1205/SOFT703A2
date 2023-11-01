@@ -55,4 +55,12 @@ public class DetailProductViewModel : IDetailProductViewModel
 
         return false;
     }
+
+    public async Task Promote(string id)
+    {
+        var product = await _productRepository.GetByIdAsync(id);
+        product.IsPromoted = true;
+        await _productRepository.UpdateAsync(product);
+        
+    }
 }

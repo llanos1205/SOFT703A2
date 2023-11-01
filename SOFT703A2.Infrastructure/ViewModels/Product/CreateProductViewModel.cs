@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SOFT703A2.Infrastructure.Contracts.Repositories;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Product;
 
@@ -12,12 +13,16 @@ public class CreateProductViewModel : ICreateProductViewModel
     [Required] public string? Photo { get; set; }
     [Required] public int Stock { get; set; }
     [Required] public double Price { get; set; }
+    public List<SelectListItem>? Categories { get; set; }
+    [Required] public string SelectedCategory { get; set; }
 
     private readonly IProductRepository _productRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public CreateProductViewModel(IProductRepository productRepository)
+    public CreateProductViewModel(IProductRepository productRepository, ICategoryRepository categoryRepository)
     {
         _productRepository = productRepository;
+        _categoryRepository = categoryRepository;
     }
 
     public CreateProductViewModel()
@@ -31,7 +36,8 @@ public class CreateProductViewModel : ICreateProductViewModel
             Name = this.Name,
             Photo = this.Photo,
             Stock = this.Stock,
-            Price = this.Price
+            Price = this.Price,
+            CategoryId = this.SelectedCategory
         });
         return result != null;
     }
@@ -40,5 +46,12 @@ public class CreateProductViewModel : ICreateProductViewModel
     {
         var result = await _productRepository.DeleteAsync(id);
         return result != null;
+    }
+
+    public async Task LoadCategories()
+    {
+        //get all categories and fill the selected list item
+        var categories = await _categoryRepository.GetAllAsync();
+        Categories = categories.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
     }
 }

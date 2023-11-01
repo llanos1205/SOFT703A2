@@ -5,22 +5,62 @@
     Layout = "_Layout";
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var filterProductsPath = '@Url.Action("FilterProducts", "MarketPlace")'
+    var addToTrolleyPath = '@Url.Action("AddToTrolley", "MarketPlace")'
+    var removeFromTrolleyPath = '@Url.Action("RemoveItem", "MarketPlace")'
+    var trolleyPath = '@Url.Action("Trolley", "MarketPlace")'
+    var checkOutPath = '@Url.Action("CheckOut", "MarketPlace")'
 
+</script>
+<script src="/js/MarketPlace/Index.js"></script>
 
 <div class="row">
     <div class="col-md-8">
-        <!-- Catalog -->
         <div class="row">
+            <!-- First Row: Product Search Bar and Button -->
+            <div class="col-md-11">
+                <div class="form-group">
+                    <input type="text" id="productName" class="form-control" placeholder="Search by Name">
+                </div>
+            </div>
+            <div class="col-md-1">
+                <button id="searchButton" class="btn btn-primary" style="width: 70px;">Search</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Second Row: Checkboxes and Labels -->
+            <div class="col-md-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="categoryCheckbox">
+                    <label class="form-check-label" for="categoryCheckbox">Search by Category</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="promotedCheckbox">
+                    <label class="form-check-label" for="promotedCheckbox">Search Promoted Products</label>
+                </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-1">
+                <button id="sortButton" class="btn btn-primary" style="width: 70px;">Sort</button>
+            </div>
+        </div>
+        <div class="row-md-1"></div>
+
+
+        <!-- Catalog -->
+        <div class="row" id="catalog-container">
             @foreach (var product in Model.Catalog)
             {
                 <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="@product.Photo" class="card-img-top" alt="Product Image">
+                    <div class="card" style="width: 250px; height: 300px;">
+                        <img src="@product.Photo" class="card-img-top" alt="Product Image" style="height: 190px;">
                         <div class="card-body">
-                            <h5 class="card-title">@product.Name</h5>
-                            <p class="card-text">Price: $@product.Price</p>
-                            <p class="card-text">In Stock: @product.Stock</p>
-                            
+                            <h6 class="card-title">@product.Name - $@product.Price</h6>
                         </div>
                         <a href="javascript:void(0);" class="btn btn-primary addFromCatalog" data-product-id="@product.Id">Add</a>
                     </div>
@@ -29,7 +69,8 @@
             }
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-1"></div>
+    <div class="col-md-3">
         <!-- Trolley -->
         <h3>Trolley</h3>
         <div id="trolley-container">
@@ -64,121 +105,3 @@
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function () {
-        function showOkMessage(message) {
-                    var $modal = $('#okModal');
-                    $modal.find('.modal-body').text(message);
-                    $modal.modal('show');
-                }
-        $('.card').on('click', '.addFromCatalog', function () {
-                    var productId = $(this).data('product-id').toString();
-                    var token = $('input[name="__RequestVerificationToken"]').val();
-                    $.ajax({
-                        url: '@Url.Action("AddToTrolley", "MarketPlace")',
-                        type: 'GET',
-                        data: { productId: productId },
-                        headers: {
-                            RequestVerificationToken: token
-                        },
-                        success: function () {
-                            fetchTrolleyData();
-                        }
-                    });
-                });
-        $('#trolley-container').on('click', '.addToTrolley', function () {
-                    var productId = $(this).data('product-id').toString(); 
-                    var token = $('input[name="__RequestVerificationToken"]').val(); 
-                    $.ajax({
-                        url: '@Url.Action("AddToTrolley", "MarketPlace")',
-                        type: 'GET',
-                        data: { productId: productId },
-                        headers: {
-                            RequestVerificationToken: token 
-                        },
-                        success: function () {
-                            
-                            fetchTrolleyData();
-                        }
-                    });
-                });
-
-        // Use event delegation for removing items from the trolley
-        $('#trolley-container').on('click', '.removeFromTrolley', function () {
-            var productId = $(this).data('product-id').toString(); 
-            var token = $('input[name="__RequestVerificationToken"]').val(); 
-            $.ajax({
-                url: '@Url.Action("RemoveItem", "MarketPlace")',
-                type: 'GET',
-                data: { id: productId },
-                headers: {
-                    RequestVerificationToken: token
-                },
-                success: function () {
-                   
-                    fetchTrolleyData();
-                }
-            });
-            
-        });
-
-        function fetchTrolleyData() {
-            var token = $('input[name="__RequestVerificationToken"]').val(); // Get the anti-forgery token from a hidden input field
-
-            $.ajax({
-                url: '@Url.Action("Trolley", "MarketPlace")',
-                type: 'GET',
-                headers: {
-                    RequestVerificationToken: token // Include the token in the request headers
-                },
-                success: function (data) {
-                    // Clear the existing table content
-                    var $tableBody = $('#trolley-container table tbody');
-                    $tableBody.empty();
-
-                    // Loop through the JSON data and build the table rows
-                    $.each(data.ProductXTrolleys.$values, function (index, item) {
-                        var row = '<tr>' +
-                            '<td>' + item.Product.Name + '</td>' +
-                            '<td>' + item.Product.Price + '</td>' +
-                            '<td>' + item.Quantity + '</td>' +
-                            '<td>' + (item.Quantity * item.Product.Price) + '</td>' +
-                            '<td>' +
-                            '<a href="javascript:void(0);" class="btn btn-primary removeFromTrolley" data-product-id="' + item.ProductId + '">-</a>' +
-                            '<a href="javascript:void(0);" class="btn btn-primary addToTrolley" data-product-id="' + item.ProductId + '">+</a>' +
-                            '</td>' +
-                            '</tr>';
-                        $tableBody.append(row);
-                    });
-                    $('#trolley-container p').text('Total: $' + data.Total);
-                    
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        }
- 
-        $('#trolley-container').on('click', '.checkoutTrolley', function () {
-                    var trolleyId = $(this).data('trolley-id').toString(); 
-                    var token = $('input[name="__RequestVerificationToken"]').val();
-                    $.ajax({
-                        url: '@Url.Action("CheckOut", "MarketPlace")',
-                        type: 'GET',
-                        data: { trolleyid: trolleyId },
-                        headers: {
-                            RequestVerificationToken: token 
-                        },
-                        success: function () {
-                           
-                            fetchTrolleyData();
-                            window.alert('Transaction Made');
-   
-                        }
-                    });
-                    
-                });
-            
-        
-    });
-</script>

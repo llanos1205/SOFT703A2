@@ -4,36 +4,79 @@
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var filterProductsPath = '@Url.Action("FilterProducts", "MarketPlace")'
+    var productDetailPath = '@Url.Action("Detail", "Product")'
+    var productDeletePath = '@Url.Action("Delete", "Product")'
+    var productPromotePath = '@Url.Action("Promote", "Product")'
+</script>
+<script src="/js/Product/List.js"></script>
 
 <h2>Products</h2>
-<a href="@Url.Action("Add", "Product")" class="btn btn-primary">Add</a>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Photo Url</th>
-        <th>Stock</th>
-        <th>Price</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var product in Model.Products)
-    {
+<div class="row">
+    <!-- First Row: Product Search Bar and Button -->
+    <div class="col-md-10">
+        <div class="form-group">
+            <input type="text" id="productName" class="form-control" placeholder="Search by Name">
+        </div>
+    </div>
+    <div class="col-md-1">
+        <button id="searchButton" class="btn btn-primary" style="width: 70px;">Search</button>
+    </div>
+    <div class="col-md-1">
+        <a href="@Url.Action("Add", "Product")" class="btn btn-primary" style="width: 70px;">Add</a>
+    </div>
+</div>
+<div class="row">
+    <!-- Second Row: Checkboxes and Labels -->
+    <div class="col-md-3">
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="categoryCheckbox">
+            <label class="form-check-label" for="categoryCheckbox">Search by Category</label>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="promotedCheckbox">
+            <label class="form-check-label" for="promotedCheckbox">Search Promoted Products</label>
+        </div>
+    </div>
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-1">
+        <button id="sortButton" class="btn btn-primary" style="width: 70px;">Sort</button>
+    </div>
+</div>
+<div class="row">
+    <table class="table">
+        <thead>
         <tr>
-            <td>@product.Name</td>
-            <td>
-                <img src="@product.Photo" width="100" height="100"/>
-            </td>
-            <td>@product.Stock</td>
-            <td>@product.Price</td>
-            <td>
-                <a href="@Url.Action("Detail", "Product", new { id = product.Id })" class="btn btn-primary">Edit</a>
-                <a href="@Url.Action("Delete", "Product", new { id = product.Id })" class="btn btn-danger">Delete</a>
-            </td>
+            <th>Name</th>
+            <th>Photo Url</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Actions</th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody id="product-table-body">
+        @foreach (var product in Model.Products)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>
+                    <img src="@product.Photo" width="100" height="100"/>
+                </td>
+                <td>@product.Stock</td>
+                <td>@product.Price</td>
+                <td>
+                    <a href="@Url.Action("Detail", "Product", new { id = product.Id })" class="btn btn-primary">Edit</a>
+                    <a href="@Url.Action("Delete", "Product", new { id = product.Id })" class="btn btn-danger">Delete</a>
+                    <a href="@Url.Action("Promote", "Product", new { id = product.Id })" class="btn btn-primary">Promote</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
