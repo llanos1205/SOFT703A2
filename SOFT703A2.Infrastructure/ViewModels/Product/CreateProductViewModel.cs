@@ -11,6 +11,7 @@ public class CreateProductViewModel : ICreateProductViewModel
 {
     [Required] public string? Name { get; set; }
     [Required] public string? Photo { get; set; }
+    [Required] public bool IsPromoted { get; set; }
     [Required] public int Stock { get; set; }
     [Required] public double Price { get; set; }
     public List<SelectListItem>? Categories { get; set; }
@@ -37,6 +38,7 @@ public class CreateProductViewModel : ICreateProductViewModel
             Photo = this.Photo,
             Stock = this.Stock,
             Price = this.Price,
+            IsPromoted = this.IsPromoted,
             CategoryId = this.SelectedCategory
         });
         return result != null;
@@ -50,7 +52,6 @@ public class CreateProductViewModel : ICreateProductViewModel
 
     public async Task LoadCategories()
     {
-        //get all categories and fill the selected list item
         var categories = await _categoryRepository.GetAllAsync();
         Categories = categories.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
     }

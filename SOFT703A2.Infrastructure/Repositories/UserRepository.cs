@@ -71,13 +71,12 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 
     public Task<User?> GetUserTrolleyTransaction(string? id)
     {
-        
         return id == null
             ? _context.Users
-                .Include(x => x.Trolleys.Where(t => !t.IsCurrent).OrderBy(x=>x.TransactionDate))
+                .Include(x => x.Trolleys.Where(t => !t.IsCurrent).OrderBy(x => x.TransactionDate))
                 .FirstOrDefaultAsync(x => x.Id == GetUserId())
             : _context.Users
-                .Include(x => x.Trolleys.Where(t => !t.IsCurrent).OrderBy(x=>x.TransactionDate))
+                .Include(x => x.Trolleys.Where(t => !t.IsCurrent).OrderBy(x => x.TransactionDate))
                 .FirstOrDefaultAsync(x => x.Id == id);
     }
 
@@ -90,5 +89,59 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     public async Task AddDefaultAsync(User user, string? password)
     {
         var result = await _userManager.CreateAsync(user, password);
+    }
+
+    public async Task<List<User>> GetExtendedSearch(string userName, bool byVisit, bool byEmail, bool byPhone)
+    {
+        try
+        {
+            var query = _context.Users.AsQueryable();
+
+            if (byVisit)
+            {
+                query = query.OrderByDescending(user => user.Logins.Count).Take(3);
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(userName))
+                {
+                    if (byEmail)
+                    {
+                        query = query.Where(user => user.Email.ToLower().Contains(userName));
+                    }
+                    else if (byPhone)
+                    {
+                        query = query.Where(user => user.PhoneNumber.ToLower().Contains(userName));
+                    }
+                    else
+                    {
+                        query = query.Where(user => user.FirstName.ToLower().Contains(userName) ||
+                                                    user.LastName.ToLower().Contains(userName) ||
+                                                    user.UserName.ToLower().Contains(userName));
+                    }
+                }
+            }
+
+            // Execute the query and return the filtered products as a list
+            var filteredProducts = await query
+                .Select(user => new User
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber,
+                    Email = user.Email,
+                    Logins = user.Logins
+                })
+                .ToListAsync();
+
+            return filteredProducts;
+        }
+        catch (Exception ex)
+        {
+            // do something here
+            throw;
+        }
     }
 }

@@ -16,6 +16,11 @@ public class ListUserViewModel:IListUserViewModel
     }
     public async Task GetAllAsync()
     {
-        Users = await _userRepository.GetAllAsync();
+        Users = await _userRepository.GetExtendedSearch("",false,false,false);
+    }
+
+    public async Task UpdateUsersList(string userName, bool byVisit, bool byEmail, bool byPhone)
+    {
+        Users = await _userRepository.GetExtendedSearch(userName, byVisit, byEmail, byPhone);
     }
 }

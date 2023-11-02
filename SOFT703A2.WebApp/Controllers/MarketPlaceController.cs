@@ -29,7 +29,8 @@ public class MarketPlaceController : Controller
         await _marketPlaceViewModel.AddToTrolley(productId);
         var options = new JsonSerializerOptions
         {
-            ReferenceHandler = ReferenceHandler.Preserve
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            WriteIndented = true 
         };
         string trolleyJson = JsonSerializer.Serialize(_marketPlaceViewModel.CurrentTrolley, options);
         return Content(trolleyJson, "application/json");
@@ -43,7 +44,8 @@ public class MarketPlaceController : Controller
         await _marketPlaceViewModel.RemoveFromTrolley(id);
         var options = new JsonSerializerOptions
         {
-            ReferenceHandler = ReferenceHandler.Preserve
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            WriteIndented = true 
         };
         string trolleyJson = JsonSerializer.Serialize(_marketPlaceViewModel.CurrentTrolley, options);
         return Content(trolleyJson, "application/json");
@@ -58,7 +60,8 @@ public class MarketPlaceController : Controller
         await _marketPlaceViewModel.GetTrolley();
         var options = new JsonSerializerOptions
         {
-            ReferenceHandler = ReferenceHandler.Preserve
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            WriteIndented = true 
         };
         string trolleyJson = JsonSerializer.Serialize(_marketPlaceViewModel.CurrentTrolley, options);
         return Content(trolleyJson, "application/json");
@@ -72,7 +75,8 @@ public class MarketPlaceController : Controller
         await _marketPlaceViewModel.GetTrolley();
         var options = new JsonSerializerOptions
         {
-            ReferenceHandler = ReferenceHandler.Preserve
+            ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            WriteIndented = true 
         };
         string trolleyJson = JsonSerializer.Serialize(_marketPlaceViewModel.CurrentTrolley, options);
         return Content(trolleyJson, "application/json");
@@ -90,7 +94,8 @@ public class MarketPlaceController : Controller
 
             var options = new JsonSerializerOptions
             {
-                ReferenceHandler = ReferenceHandler.Preserve
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                WriteIndented = true 
             };
             string filteredProductsJson = JsonSerializer.Serialize(_marketPlaceViewModel.Catalog, options);
 
@@ -98,7 +103,7 @@ public class MarketPlaceController : Controller
         }
         catch (Exception ex)
         {
-            // Handle any exceptions or errors as needed
+      
             return BadRequest("An error occurred while filtering products.");
         }
     }

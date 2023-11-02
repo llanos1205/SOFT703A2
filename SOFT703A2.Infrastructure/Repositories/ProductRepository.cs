@@ -40,7 +40,19 @@ public class ProductRepository: BaseRepository<Product>,IProductRepository
             }
 
             // Execute the query and return the filtered products as a list
-            var filteredProducts = await query.ToListAsync();
+            var filteredProducts = await query
+                .Select(product => new Product
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Stock = product.Stock,
+                    Price = product.Price,
+                    IsPromoted = product.IsPromoted,
+                    Photo = product.Photo,
+                    Category = product.Category
+                })
+                .ToListAsync();
+
             return filteredProducts;
         }
         catch (Exception ex)
@@ -48,5 +60,11 @@ public class ProductRepository: BaseRepository<Product>,IProductRepository
             // do something here
             throw;
         }
+    }
+
+    public async Task<List<Product>> GetAllWithCategoriesAsync()
+    {
+        var result = await _context.Product.Include(c=> c.Category).ToListAsync();
+        return result;
     }
 }

@@ -9,6 +9,7 @@ public interface ICreateProductViewModel
     public string? Photo { get; set; }
     public int Stock { get; set; }
     public double Price { get; set; }
+    public bool IsPromoted { get; set; }
     public List<SelectListItem>? Categories { get; set; }
     public string SelectedCategory { get; set; }
     public Task<bool> Create();

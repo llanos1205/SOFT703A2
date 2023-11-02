@@ -29,6 +29,7 @@ public class ProductController : Controller
     public async Task<IActionResult> Detail(string id)
     {
         await _detailProductViewModel.Find(id);
+        await _detailProductViewModel.LoadCategories();
         return View(_detailProductViewModel);
     }
 
@@ -40,6 +41,8 @@ public class ProductController : Controller
             _detailProductViewModel.Photo = vm.Photo;
             _detailProductViewModel.Price = vm.Price;
             _detailProductViewModel.Stock = vm.Stock;
+            _detailProductViewModel.IsPromoted = vm.IsPromoted;
+            _detailProductViewModel.SelectedCategory = vm.SelectedCategory;
             var result = await _detailProductViewModel.Update(id);
             if (result)
             {
@@ -71,6 +74,7 @@ public class ProductController : Controller
             _createProductViewModel.Price = vm.Price;
             _createProductViewModel.Stock = vm.Stock;
             _createProductViewModel.SelectedCategory = vm.SelectedCategory;
+            _createProductViewModel.IsPromoted = vm.IsPromoted;
             var result = await _createProductViewModel.Create();
             if (result)
             {
@@ -104,6 +108,11 @@ public class ProductController : Controller
     public async Task<IActionResult> Promote(string id)
     {
         await _detailProductViewModel.Promote(id);
+        return RedirectToAction("List");
+    }
+    public async Task<IActionResult> UnPromote(string id)
+    {
+        await _detailProductViewModel.UnPromote(id);
         return RedirectToAction("List");
     }
 }

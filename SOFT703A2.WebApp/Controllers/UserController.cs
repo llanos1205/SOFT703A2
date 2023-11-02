@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.User;
 using SOFT703A2.Infrastructure.ViewModels.User;
@@ -90,5 +92,31 @@ public class UserController : Controller
         }
 
         return RedirectToAction("List");
+    }
+
+    [HttpGet]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> FilterUsers(string userName, bool visitsCheckbox, bool emailCheckbox,bool phoneCheckbox)
+    {
+        try
+        {
+
+            await _listUserViewModel.UpdateUsersList( userName,  visitsCheckbox,  emailCheckbox, phoneCheckbox);
+
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                WriteIndented = true 
+            };
+            string filteredProductsJson = JsonSerializer.Serialize(_listUserViewModel.Users, options);
+
+            return Content(filteredProductsJson, "application/json");
+        }
+        catch (Exception ex)
+        {
+      
+            return BadRequest("An error occurred while filtering products.");
+        }
     }
 }
