@@ -30,6 +30,7 @@ public class UserController : Controller
     public async Task<IActionResult> Detail(string id)
     {
         await _detailUserViewModel.Find(id);
+        await _detailUserViewModel.LoadRoles();
         return View(_detailUserViewModel);
     }
 
@@ -42,6 +43,7 @@ public class UserController : Controller
             _detailUserViewModel.PhoneNumber = vm.PhoneNumber;
             _detailUserViewModel.Email = vm.Email;
             _detailUserViewModel.Id = vm.Id;
+            _detailUserViewModel.SelectedRole = vm.SelectedRole;
             var result = await _detailUserViewModel.Update();
             if (result)
             {
@@ -51,13 +53,14 @@ public class UserController : Controller
             {
                 ModelState.AddModelError("", "Something went wrong");
             }
-            
         }
+
         return RedirectToAction("Detail");
     }
 
-    public IActionResult Add()
+    public async Task<IActionResult> Add()
     {
+        await _createUserViewModel.LoadRoles();
         return View(_createUserViewModel);
     }
 
@@ -71,7 +74,7 @@ public class UserController : Controller
             _createUserViewModel.LastName = vm.LastName;
             _createUserViewModel.PhoneNumber = vm.PhoneNumber;
             _createUserViewModel.Email = vm.Email;
-            await  _createUserViewModel.Create();
+            await _createUserViewModel.Create();
             return RedirectToAction("List");
         }
 
@@ -97,17 +100,17 @@ public class UserController : Controller
     [HttpGet]
     [Authorize]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> FilterUsers(string userName, bool visitsCheckbox, bool emailCheckbox,bool phoneCheckbox)
+    public async Task<IActionResult> FilterUsers(string userName, bool visitsCheckbox, bool emailCheckbox,
+        bool phoneCheckbox)
     {
         try
         {
-
-            await _listUserViewModel.UpdateUsersList( userName,  visitsCheckbox,  emailCheckbox, phoneCheckbox);
+            await _listUserViewModel.UpdateUsersList(userName, visitsCheckbox, emailCheckbox, phoneCheckbox);
 
             var options = new JsonSerializerOptions
             {
                 ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                WriteIndented = true 
+                WriteIndented = true
             };
             string filteredProductsJson = JsonSerializer.Serialize(_listUserViewModel.Users, options);
 
@@ -115,7 +118,6 @@ public class UserController : Controller
         }
         catch (Exception ex)
         {
-      
             return BadRequest("An error occurred while filtering products.");
         }
     }

@@ -17,36 +17,7 @@
 
 <div class="row">
     <div class="col-md-8">
-        <div class="row">
-            <div class="col-md-11">
-                <div class="form-group">
-                    <input type="text" id="productName" class="form-control" placeholder="Search by Name">
-                </div>
-            </div>
-            <div class="col-md-1">
-                <button id="searchButton" class="btn btn-primary" style="width: 70px;">Search</button>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="categoryCheckbox">
-                    <label class="form-check-label" for="categoryCheckbox">Search by Category</label>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="promotedCheckbox">
-                    <label class="form-check-label" for="promotedCheckbox">Search Promoted Products</label>
-                </div>
-            </div>
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-1">
-                <button id="sortButton" class="btn btn-primary" style="width: 70px;">Sort</button>
-            </div>
-        </div>
+        <partial name="_ProductSearch"/>
         <div class="row-md-1"></div>
         <!-- Catalog -->
         <div class="row" id="catalog-container">

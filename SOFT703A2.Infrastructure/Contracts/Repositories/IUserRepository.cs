@@ -10,8 +10,9 @@ public interface IUserRepository: IBaseRepository<User>
     public Task LogOut();
     public string? GetUserId();
     Task<User?> GetUserTrolleyTransaction(string? id);
-    Task SetRole(string email, string role);
+    Task SetRole(string email, string roleName);
     Task AddDefaultAsync(User user, string? password);
 
     Task<List<User>> GetExtendedSearch(string userName, bool byVisit, bool byEmail, bool byPhone);
+    Task<string?> GetRoleId(string userId);
 }

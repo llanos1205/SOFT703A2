@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿
+using SOFT703A2.Infrastructure.ViewModels.Shared;
 
 namespace SOFT703A2.Infrastructure.Contracts.ViewModels.Product;
 
@@ -10,7 +11,7 @@ public interface IDetailProductViewModel
     public int Stock { get; set; }
     public double Price { get; set; }
     public bool IsPromoted { get; set; }
-    public List<SelectListItem>? Categories { get; set; }
+    public List<DropdownOption>? Categories { get; set; }
     public string SelectedCategory { get; set; }
     public Task<bool> Update(string id);
     public Task<bool> Find(string id);

@@ -42,6 +42,7 @@ public class RegisterViewModel:IRegisterViewModel
             UserName = Email,
             
         },Password);
+        await _userRepository.SetRole(Email, "Client");
         return result!=null;
     }
 
