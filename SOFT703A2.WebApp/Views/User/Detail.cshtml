@@ -6,10 +6,19 @@
 }
 
 
-
 <h2>User Information</h2>
 <form asp-controller="User" asp-action="Update" method="post" asp-route-id="@Model.Id">
     <input type="hidden" asp-for="Id"/>
+    <div class="form-group">
+        <label asp-for="FirstName">FirstName</label>
+        <input asp-for="FirstName" class="form-control" value="@Model.FirstName" placeholder="FirstName"/>
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName">LastName</label>
+        <input asp-for="LastName" class="form-control" value="@Model.LastName" placeholder="LastName"/>
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
     <div class="form-group">
         <label asp-for="Email">Email</label>
         <input asp-for="Email" class="form-control" value="@Model.Email" placeholder="Email"/>
@@ -21,14 +30,14 @@
         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="FirstName">FirstName</label>
-        <input asp-for="FirstName" class="form-control" value="@Model.FirstName" placeholder="FirstName"/>
-        <span asp-validation-for="FirstName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="LastName">LastName</label>
-        <input asp-for="LastName" class="form-control" value="@Model.LastName" placeholder="LastName"/>
-        <span asp-validation-for="LastName" class="text-danger"></span>
+        <label asp-for="SelectedRole">Role</label>
+        <select asp-for="SelectedRole" class="form-control" id="SelectedCategoryId">
+            @foreach (var role in Model.Roles)
+            {
+                <option value="@role.Value">@role.Text</option>
+            }
+        </select>
+        <span asp-validation-for="Roles" class="text-danger"></span>
     </div>
 
 

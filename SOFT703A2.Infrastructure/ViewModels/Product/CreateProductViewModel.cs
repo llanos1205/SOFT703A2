@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using SOFT703A2.Infrastructure.Contracts.Repositories;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Product;
+using SOFT703A2.Infrastructure.ViewModels.Shared;
 
 namespace SOFT703A2.Infrastructure.ViewModels.Product;
 
@@ -14,7 +14,7 @@ public class CreateProductViewModel : ICreateProductViewModel
     [Required] public bool IsPromoted { get; set; }
     [Required] public int Stock { get; set; }
     [Required] public double Price { get; set; }
-    public List<SelectListItem>? Categories { get; set; }
+    public List<DropdownOption>? Categories { get; set; }
     [Required] public string SelectedCategory { get; set; }
 
     private readonly IProductRepository _productRepository;
@@ -53,6 +53,6 @@ public class CreateProductViewModel : ICreateProductViewModel
     public async Task LoadCategories()
     {
         var categories = await _categoryRepository.GetAllAsync();
-        Categories = categories.Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }).ToList();
+        Categories = categories.Select(c => new DropdownOption { Value = c.Id.ToString(), Text = c.Name }).ToList();
     }
 }
