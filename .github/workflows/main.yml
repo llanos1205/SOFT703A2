@@ -23,13 +23,13 @@ jobs:
           dotnet-version: 7.x  
 
       - name: Restore dependencies
-        run: dotnet restore SOFT302A2.WebApp
+        run: dotnet restore SOFT703A2.WebApp
 
       - name: Build application
-        run: dotnet build SOFT302A2.WebApp --configuration Release
+        run: dotnet build SOFT703A2.WebApp --configuration Release
 
       - name: Publish application
-        run: dotnet publish SOFT302A2.WebApp --configuration Release --output ./publish
+        run: dotnet publish SOFT703A2.WebApp --configuration Release --output ./publish
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
