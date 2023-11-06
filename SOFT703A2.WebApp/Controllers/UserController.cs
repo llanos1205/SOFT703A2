@@ -12,89 +12,148 @@ public class UserController : Controller
     private readonly IListUserViewModel _listUserViewModel;
     private readonly IDetailUserViewModel _detailUserViewModel;
     private readonly ICreateUserViewModel _createUserViewModel;
+    private readonly ILogger<UserController> _logger;
 
     public UserController(IListUserViewModel listUserViewModel, IDetailUserViewModel detailUserViewModel,
-        ICreateUserViewModel createUserViewModel)
+        ICreateUserViewModel createUserViewModel, ILogger<UserController> logger)
     {
         _listUserViewModel = listUserViewModel;
         _detailUserViewModel = detailUserViewModel;
         _createUserViewModel = createUserViewModel;
+        _logger = logger;
     }
 
     public async Task<IActionResult> List()
     {
-        await _listUserViewModel.GetAllAsync();
-        return View(_listUserViewModel);
+        try
+        {
+            _logger.LogInformation("List called");
+            await _listUserViewModel.GetAllAsync();
+            return View(_listUserViewModel);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
 
     public async Task<IActionResult> Detail(string id)
     {
-        await _detailUserViewModel.Find(id);
-        await _detailUserViewModel.LoadRoles();
-        return View(_detailUserViewModel);
+        try
+        {
+            _logger.LogInformation("Detail called");
+            await _detailUserViewModel.Find(id);
+            await _detailUserViewModel.LoadRoles();
+            return View(_detailUserViewModel);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
 
     public async Task<IActionResult> Update(string id, DetailUserViewModel vm)
     {
-        if (ModelState.IsValid)
+        try
         {
-            _detailUserViewModel.FirstName = vm.FirstName;
-            _detailUserViewModel.LastName = vm.LastName;
-            _detailUserViewModel.PhoneNumber = vm.PhoneNumber;
-            _detailUserViewModel.Email = vm.Email;
-            _detailUserViewModel.Id = vm.Id;
-            _detailUserViewModel.SelectedRole = vm.SelectedRole;
-            var result = await _detailUserViewModel.Update();
-            if (result)
+            _logger.LogInformation("Update called");
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("List");
+                _detailUserViewModel.FirstName = vm.FirstName;
+                _detailUserViewModel.LastName = vm.LastName;
+                _detailUserViewModel.PhoneNumber = vm.PhoneNumber;
+                _detailUserViewModel.Email = vm.Email;
+                _detailUserViewModel.Id = vm.Id;
+                _detailUserViewModel.SelectedRole = vm.SelectedRole;
+                var result = await _detailUserViewModel.Update();
+                if (result)
+                {
+                    _logger.LogInformation("Update completed");
+                    return RedirectToAction("List");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                }
             }
-            else
-            {
-                ModelState.AddModelError("", "Something went wrong");
-            }
-        }
 
-        return RedirectToAction("Detail");
+            return RedirectToAction("Detail");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
 
     public async Task<IActionResult> Add()
     {
-        await _createUserViewModel.LoadRoles();
-        return View(_createUserViewModel);
+        try
+        {
+            _logger.LogInformation("Add called");
+            await _createUserViewModel.LoadRoles();
+            return View(_createUserViewModel);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
 
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> Add(CreateUserViewModel vm)
     {
-        if (ModelState.IsValid)
+        try
         {
-            _createUserViewModel.FirstName = vm.FirstName;
-            _createUserViewModel.LastName = vm.LastName;
-            _createUserViewModel.PhoneNumber = vm.PhoneNumber;
-            _createUserViewModel.Email = vm.Email;
-            await _createUserViewModel.Create();
-            return RedirectToAction("List");
-        }
+            _logger.LogInformation("Add called");
+            if (ModelState.IsValid)
+            {
+                _createUserViewModel.FirstName = vm.FirstName;
+                _createUserViewModel.LastName = vm.LastName;
+                _createUserViewModel.PhoneNumber = vm.PhoneNumber;
+                _createUserViewModel.Email = vm.Email;
+                await _createUserViewModel.Create();
+                _logger.LogInformation("Add completed");
+                return RedirectToAction("List");
+            }
 
-        return View(_createUserViewModel);
+            return View(_createUserViewModel);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
 
 
     public async Task<IActionResult> Delete(string id)
     {
-        var result = await _createUserViewModel.Delete(id);
-        if (result)
+        try
         {
+            _logger.LogInformation("Delete called");
+            var result = await _createUserViewModel.Delete(id);
+            if (result)
+            {
+                _logger.LogInformation("Delete completed");
+                return RedirectToAction("List");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Something went wrong");
+            }
+
             return RedirectToAction("List");
         }
-        else
+        catch (Exception e)
         {
-            ModelState.AddModelError("", "Something went wrong");
+            _logger.LogError(e.Message);
+            throw;
         }
-
-        return RedirectToAction("List");
     }
 
     [HttpGet]
@@ -105,6 +164,7 @@ public class UserController : Controller
     {
         try
         {
+            _logger.LogInformation("FilterUsers called");
             await _listUserViewModel.UpdateUsersList(userName, visitsCheckbox, emailCheckbox, phoneCheckbox);
 
             var options = new JsonSerializerOptions
@@ -113,11 +173,12 @@ public class UserController : Controller
                 WriteIndented = true
             };
             string filteredProductsJson = JsonSerializer.Serialize(_listUserViewModel.Users, options);
-
+            _logger.LogInformation("FilterUsers completed");
             return Content(filteredProductsJson, "application/json");
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
             return BadRequest("An error occurred while filtering products.");
         }
     }
