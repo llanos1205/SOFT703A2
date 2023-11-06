@@ -15,6 +15,8 @@ using SOFT703A2.Infrastructure.ViewModels.Catalog;
 using SOFT703A2.Infrastructure.ViewModels.Product;
 using SOFT703A2.Infrastructure.ViewModels.Trolley;
 using SOFT703A2.Infrastructure.ViewModels.User;
+using Serilog;
+using Serilog.Filters;
 
 namespace SOFT703A2.Infrastructure;
 
@@ -30,6 +32,7 @@ public static class InfrastructureRegistration
         services.AddIdentity<User, Role>(opt => { opt.SignIn.RequireConfirmedAccount = false; })
             .AddEntityFrameworkStores<ApplicationDbContext>();
         services.ConfigureApplicationCookie(options => { options.LoginPath = "/Account/Login"; });
+        LoadLogging(services);
         LoadRepositories(services);
         LoadViewModels(services);
         return services;
@@ -56,5 +59,14 @@ public static class InfrastructureRegistration
         services.AddScoped<ICreateUserViewModel, CreateUserViewModel>();
         services.AddScoped<IMarketPlaceViewModel, MarketPlaceViewModel>();
         services.AddScoped<ITrolleyViewModel, TrolleyViewModel>();
+    }
+    private static void LoadLogging(IServiceCollection services)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.File("./log.txt", rollingInterval: RollingInterval.Day)
+            .Filter.ByExcluding(Matching.FromSource("Microsoft.EntityFrameworkCore.Database.Command"))
+            .CreateLogger();
+        services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
     }
 }

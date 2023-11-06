@@ -10,109 +10,187 @@ public class ProductController : Controller
     private readonly IListProductViewModel _listProductViewModel;
     private readonly ICreateProductViewModel _createProductViewModel;
     private readonly IDetailProductViewModel _detailProductViewModel;
+    private readonly ILogger<ProductController> _logger;
 
     public ProductController(IListProductViewModel listProductViewModel, ICreateProductViewModel createProductViewModel,
-        IDetailProductViewModel detailProductViewModel)
+        IDetailProductViewModel detailProductViewModel, ILogger<ProductController> logger)
     {
         _listProductViewModel = listProductViewModel;
         _createProductViewModel = createProductViewModel;
         _detailProductViewModel = detailProductViewModel;
+        _logger = logger;
     }
 
     [Authorize]
     public async Task<IActionResult> List()
     {
-        await _listProductViewModel.GetAll();
-        return View(_listProductViewModel);
+        try
+        {
+            _logger.LogInformation("List called");
+            await _listProductViewModel.GetAll();
+            return View(_listProductViewModel);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
 
     public async Task<IActionResult> Detail(string id)
     {
-        await _detailProductViewModel.Find(id);
-        await _detailProductViewModel.LoadCategories();
-        return View(_detailProductViewModel);
+        try
+        {
+            _logger.LogInformation("Detail called");
+            await _detailProductViewModel.Find(id);
+            await _detailProductViewModel.LoadCategories();
+            return View(_detailProductViewModel);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
 
     public async Task<IActionResult> Update(string id, DetailProductViewModel vm)
     {
-        if (ModelState.IsValid)
+        try
         {
-            _detailProductViewModel.Name = vm.Name;
-            _detailProductViewModel.Photo = vm.Photo;
-            _detailProductViewModel.Price = vm.Price;
-            _detailProductViewModel.Stock = vm.Stock;
-            _detailProductViewModel.IsPromoted = vm.IsPromoted;
-            _detailProductViewModel.SelectedCategory = vm.SelectedCategory;
-            var result = await _detailProductViewModel.Update(id);
-            if (result)
+            _logger.LogInformation("Update called");
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("List");
+                _detailProductViewModel.Name = vm.Name;
+                _detailProductViewModel.Photo = vm.Photo;
+                _detailProductViewModel.Price = vm.Price;
+                _detailProductViewModel.Stock = vm.Stock;
+                _detailProductViewModel.IsPromoted = vm.IsPromoted;
+                _detailProductViewModel.SelectedCategory = vm.SelectedCategory;
+                var result = await _detailProductViewModel.Update(id);
+                if (result)
+                {
+                    _logger.LogInformation("Update completed");
+                    return RedirectToAction("List");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                }
             }
-            else
-            {
-                ModelState.AddModelError("", "Something went wrong");
-            }
-        }
 
-        return RedirectToAction("Detail");
+            return RedirectToAction("Detail");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
 
     public async Task<IActionResult> Add()
     {
-        await _createProductViewModel.LoadCategories();
-        return View(_createProductViewModel);
+        try
+        {
+            _logger.LogInformation("Add called");
+            await _createProductViewModel.LoadCategories();
+            return View(_createProductViewModel);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
 
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> Add(CreateProductViewModel vm)
     {
-        if (ModelState.IsValid)
+        try
         {
-            _createProductViewModel.Name = vm.Name;
-            _createProductViewModel.Photo = vm.Photo;
-            _createProductViewModel.Price = vm.Price;
-            _createProductViewModel.Stock = vm.Stock;
-            _createProductViewModel.SelectedCategory = vm.SelectedCategory;
-            _createProductViewModel.IsPromoted = vm.IsPromoted;
-            var result = await _createProductViewModel.Create();
+            _logger.LogInformation("Add called");
+            if (ModelState.IsValid)
+            {
+                _createProductViewModel.Name = vm.Name;
+                _createProductViewModel.Photo = vm.Photo;
+                _createProductViewModel.Price = vm.Price;
+                _createProductViewModel.Stock = vm.Stock;
+                _createProductViewModel.SelectedCategory = vm.SelectedCategory;
+                _createProductViewModel.IsPromoted = vm.IsPromoted;
+                var result = await _createProductViewModel.Create();
+                if (result)
+                {
+                    _logger.LogInformation("Add completed");
+                    return RedirectToAction("List");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                }
+            }
+
+            return View(vm);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
+    }
+
+
+    public async Task<IActionResult> Delete(string id)
+    {
+        try
+        {
+            _logger.LogInformation("Delete called");
+            var result = await _createProductViewModel.Delete(id);
             if (result)
             {
+                _logger.LogInformation("Delete completed");
                 return RedirectToAction("List");
             }
             else
             {
                 ModelState.AddModelError("", "Something went wrong");
             }
-        }
 
-        return View(vm);
-    }
-
-
-    public async Task<IActionResult> Delete(string id)
-    {
-        var result = await _createProductViewModel.Delete(id);
-        if (result)
-        {
             return RedirectToAction("List");
         }
-        else
+        catch (Exception e)
         {
-            ModelState.AddModelError("", "Something went wrong");
+            _logger.LogError(e.Message);
+            throw;
         }
-
-        return RedirectToAction("List");
     }
 
     public async Task<IActionResult> Promote(string id)
     {
-        await _detailProductViewModel.Promote(id);
-        return RedirectToAction("List");
+        try
+        {
+            _logger.LogInformation("Promote called");
+            await _detailProductViewModel.Promote(id);
+            return RedirectToAction("List");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
+
     public async Task<IActionResult> UnPromote(string id)
     {
-        await _detailProductViewModel.UnPromote(id);
-        return RedirectToAction("List");
+        try
+        {
+            _logger.LogInformation("UnPromote called");
+            await _detailProductViewModel.UnPromote(id);
+            return RedirectToAction("List");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
     }
 }
