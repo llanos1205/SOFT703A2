@@ -20,7 +20,7 @@ namespace SOFT703A2.Infrastructure;
 
 public static class InfrastructureRegistration
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
+    public static async Task<IServiceCollection> AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(opt =>
@@ -32,6 +32,7 @@ public static class InfrastructureRegistration
         services.ConfigureApplicationCookie(options => { options.LoginPath = "/Account/Login"; });
         LoadRepositories(services);
         LoadViewModels(services);
+        await Seeding(services);
         return services;
     }
 
@@ -42,6 +43,7 @@ public static class InfrastructureRegistration
         services.AddScoped<ITrolleyRepository, TrolleyRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<DataSeeder>();
     }
 
     private static void LoadViewModels(IServiceCollection services)
@@ -56,5 +58,14 @@ public static class InfrastructureRegistration
         services.AddScoped<ICreateUserViewModel, CreateUserViewModel>();
         services.AddScoped<IMarketPlaceViewModel, MarketPlaceViewModel>();
         services.AddScoped<ITrolleyViewModel, TrolleyViewModel>();
+    }
+
+    private static async Task Seeding(IServiceCollection services)
+    {
+        using (var scope = services.BuildServiceProvider().CreateScope())
+        {
+            var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+            await dataSeeder.SeedData(); 
+        }
     }
 }
