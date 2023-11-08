@@ -26,7 +26,7 @@ public class TrolleyController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 }

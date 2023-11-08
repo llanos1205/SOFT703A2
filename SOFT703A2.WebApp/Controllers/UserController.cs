@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.User;
 using SOFT703A2.Infrastructure.ViewModels.User;
+using SOFT703A2.WebApp.Services;
 
 namespace SOFT703A2.WebApp.Controllers;
 
+[ServiceFilter(typeof(AdminAuthorizationFilter))]
 public class UserController : Controller
 {
     private readonly IListUserViewModel _listUserViewModel;
@@ -34,7 +36,7 @@ public class UserController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -50,7 +52,7 @@ public class UserController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -84,7 +86,7 @@ public class UserController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -99,12 +101,11 @@ public class UserController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> Add(CreateUserViewModel vm)
     {
         try
@@ -126,7 +127,7 @@ public class UserController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -152,12 +153,11 @@ public class UserController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
     [HttpGet]
-    [Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> FilterUsers(string userName, bool visitsCheckbox, bool emailCheckbox,
         bool phoneCheckbox)
@@ -179,7 +179,7 @@ public class UserController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return BadRequest("An error occurred while filtering products.");
+            return RedirectToAction("Error500", "Error");
         }
     }
 }
