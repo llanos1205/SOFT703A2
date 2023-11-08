@@ -69,4 +69,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
     {
         return await _context.SaveChangesAsync();
     }
+
+    public async Task<bool> IsEmpty()
+    {
+        return await _context.Set<T>().AnyAsync();
+    }
 }

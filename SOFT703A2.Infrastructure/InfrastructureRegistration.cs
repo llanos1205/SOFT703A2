@@ -22,7 +22,7 @@ namespace SOFT703A2.Infrastructure;
 
 public static class InfrastructureRegistration
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
+    public static async Task<IServiceCollection> AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(opt =>
@@ -35,6 +35,7 @@ public static class InfrastructureRegistration
         LoadLogging(services);
         LoadRepositories(services);
         LoadViewModels(services);
+        await Seeding(services);
         return services;
     }
 
@@ -45,6 +46,7 @@ public static class InfrastructureRegistration
         services.AddScoped<ITrolleyRepository, TrolleyRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<DataSeeder>();
     }
 
     private static void LoadViewModels(IServiceCollection services)
@@ -60,6 +62,7 @@ public static class InfrastructureRegistration
         services.AddScoped<IMarketPlaceViewModel, MarketPlaceViewModel>();
         services.AddScoped<ITrolleyViewModel, TrolleyViewModel>();
     }
+
     private static void LoadLogging(IServiceCollection services)
     {
         Log.Logger = new LoggerConfiguration()
@@ -68,5 +71,14 @@ public static class InfrastructureRegistration
             .Filter.ByExcluding(Matching.FromSource("Microsoft.EntityFrameworkCore.Database.Command"))
             .CreateLogger();
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
+    }
+
+    private static async Task Seeding(IServiceCollection services)
+    {
+        using (var scope = services.BuildServiceProvider().CreateScope())
+        {
+            var dataSeeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+            await dataSeeder.SeedData();
+        }
     }
 }
