@@ -10,11 +10,13 @@ public class MarketPlaceController : Controller
 {
     private readonly ILogger<MarketPlaceController> _logger;
     private readonly IMarketPlaceViewModel _marketPlaceViewModel;
+    private readonly IDetailMarketProductViewModel _detailMarketProduct;
 
-    public MarketPlaceController(IMarketPlaceViewModel vm, ILogger<MarketPlaceController> logger)
+    public MarketPlaceController(IMarketPlaceViewModel vm, ILogger<MarketPlaceController> logger,IDetailMarketProductViewModel dmp)
     {
         _logger = logger;
         _marketPlaceViewModel = vm;
+        _detailMarketProduct = dmp;
     }
 
     [Authorize]
@@ -158,5 +160,11 @@ public class MarketPlaceController : Controller
             _logger.LogError(ex.Message);
             return BadRequest("An error occurred while filtering products.");
         }
+    }
+
+    public async Task<IActionResult> Detail(string id)
+    {
+        await _detailMarketProduct.FindProduct(id);
+        return View(_detailMarketProduct);
     }
 }
