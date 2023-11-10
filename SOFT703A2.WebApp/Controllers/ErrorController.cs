@@ -17,6 +17,13 @@ public class ErrorController : Controller
         // Handle 403 Forbidden error
         return View("E403");
     }
+    
+    [Route("Error/404")]
+    public IActionResult NotFoundError()
+    {
+        // Return the custom 404 error view
+        return View("E404");
+    }
 
     [Route("Error/500")]
     public IActionResult Error500()

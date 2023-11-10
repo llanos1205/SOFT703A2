@@ -21,6 +21,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseStatusCodePagesWithReExecute("/Error/404");
 app.UseRouting();
 
 app.UseAuthentication();
