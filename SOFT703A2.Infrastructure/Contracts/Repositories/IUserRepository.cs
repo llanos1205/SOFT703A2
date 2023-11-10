@@ -15,4 +15,6 @@ public interface IUserRepository: IBaseRepository<User>
 
     Task<List<User>> GetExtendedSearch(string userName, bool byVisit, bool byEmail, bool byPhone);
     Task<string?> GetRoleId(string userId);
+    
+    Task<User> GetUserByEmail(string email);
 }

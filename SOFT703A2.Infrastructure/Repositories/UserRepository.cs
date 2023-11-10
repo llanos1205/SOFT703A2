@@ -10,7 +10,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
-    
+
     public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager,
         ApplicationDbContext context) : base(context)
     {
@@ -149,5 +149,10 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     {
         var role = await _context.UserRoles.FirstOrDefaultAsync(x => x.UserId == userId);
         return role.RoleId;
+    }
+
+    public async Task<User> GetUserByEmail(string email)
+    {
+        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
 }

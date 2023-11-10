@@ -14,5 +14,6 @@ public interface IBaseRepository<T> where T : IEntity
     Task<bool> ExistsAsync(string id);
     Task<int> CountAsync();
     Task<int> SaveChangesAsync();
-    
+    Task<bool> IsEmpty();
+
 }

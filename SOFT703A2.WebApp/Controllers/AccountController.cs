@@ -53,7 +53,7 @@ public class AccountController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -100,7 +100,7 @@ public class AccountController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -115,7 +115,7 @@ public class AccountController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 }

@@ -3,9 +3,11 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Catalog;
+using SOFT703A2.WebApp.Services;
 
 namespace SOFT703A2.WebApp.Controllers;
 
+[AllowAnonymous]
 public class MarketPlaceController : Controller
 {
     private readonly ILogger<MarketPlaceController> _logger;
@@ -19,7 +21,7 @@ public class MarketPlaceController : Controller
         _detailMarketProduct = dmp;
     }
 
-    [Authorize]
+    [CustomAuthorize]
     public async Task<IActionResult> Index()
     {
         try
@@ -31,12 +33,12 @@ public class MarketPlaceController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
     [HttpGet]
-    [Authorize]
+    [CustomAuthorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddToTrolley(string productId)
     {
@@ -56,7 +58,7 @@ public class MarketPlaceController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
     public async Task<IActionResult> AddToTrolleyView(string id)
@@ -82,7 +84,7 @@ public class MarketPlaceController : Controller
     }
 
     [HttpGet]
-    [Authorize]
+    [CustomAuthorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> RemoveItem(string id)
     {
@@ -102,12 +104,12 @@ public class MarketPlaceController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
     [HttpGet]
-    [Authorize]
+    [CustomAuthorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CheckOut(string trolleyid)
     {
@@ -128,12 +130,12 @@ public class MarketPlaceController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
     [HttpGet]
-    [Authorize]
+    [CustomAuthorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Trolley()
     {
@@ -153,12 +155,12 @@ public class MarketPlaceController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
     [HttpGet]
-    [Authorize]
+    [CustomAuthorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> FilterProducts(string productName, bool categoryCheckbox, bool promotedCheckbox)
     {
@@ -179,7 +181,7 @@ public class MarketPlaceController : Controller
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return BadRequest("An error occurred while filtering products.");
+            return RedirectToAction("Error500", "Error");
         }
     }
 
