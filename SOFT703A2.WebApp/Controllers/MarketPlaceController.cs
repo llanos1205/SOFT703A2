@@ -1,11 +1,13 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Catalog;
 using SOFT703A2.WebApp.Services;
 
 namespace SOFT703A2.WebApp.Controllers;
 
+[AllowAnonymous]
 public class MarketPlaceController : Controller
 {
     private readonly ILogger<MarketPlaceController> _logger;
