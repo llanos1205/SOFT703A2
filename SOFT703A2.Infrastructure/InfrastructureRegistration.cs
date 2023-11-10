@@ -61,6 +61,7 @@ public static class InfrastructureRegistration
         services.AddScoped<ICreateUserViewModel, CreateUserViewModel>();
         services.AddScoped<IMarketPlaceViewModel, MarketPlaceViewModel>();
         services.AddScoped<ITrolleyViewModel, TrolleyViewModel>();
+        services.AddScoped<IDetailMarketProductViewModel, DetailMarketProductViewModel>();
     }
 
     private static void LoadLogging(IServiceCollection services)
