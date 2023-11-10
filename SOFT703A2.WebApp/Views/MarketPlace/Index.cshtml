@@ -11,6 +11,7 @@
     var removeFromTrolleyPath = '@Url.Action("RemoveItem", "MarketPlace")'
     var trolleyPath = '@Url.Action("Trolley", "MarketPlace")'
     var checkOutPath = '@Url.Action("CheckOut", "MarketPlace")'
+    var productDetailMarketUrl = '@Url.Action("Detail", "MarketPlace")'
 
 </script>
 <script src="/js/MarketPlace/Index.js"></script>
@@ -21,26 +22,20 @@
         <div class="row-md-1"></div>
         <!-- Catalog -->
         <div class="row" id="catalog-container">
-            @if (Model.Catalog == null)
+            @foreach (var product in Model.Catalog)
             {
-                <partial name="_E404"/>
-            }
-            else
-            {
-                @foreach (var product in Model.Catalog)
-                {
-                    <div class="col-md-4 mb-4">
-                        <div class="card" style="width: 250px; height: 300px;">
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="width: 250px; height: 300px;">
+                        <a href="@Url.Action("Detail", "MarketPlace", new { id = product.Id })">
                             <img src="@product.Photo" class="card-img-top" alt="Product Image" style="height: 190px;">
-                            <div class="card-body">
-                                <h6 class="card-title">@product.Name - $@product.Price</h6>
-                                <h7 class="card-title">@product.Category.Name</h7>
-                            </div>
-                            <a href="javascript:void(0);" class="btn btn-primary addFromCatalog bg-green" data-product-id="@product.Id">Add</a>
+                        </a>
+                        <div class="card-body">
+                            <h6 class="card-title">@product.Name - $@product.Price</h6>
+                            <h7 class="card-title">@product.Category.Name</h7>
                         </div>
-
+                        <a href="javascript:void(0);" class="btn btn-primary addFromCatalog" data-product-id="@product.Id">Add</a>
                     </div>
-                }
+                </div>
             }
         </div>
     </div>
@@ -67,15 +62,15 @@
                         <td>@item.Quantity</td>
                         <td>@(item.Quantity * item.Product.Price)</td>
                         <td>
-                            <a href="javascript:void(0);" class="btn btn-danger  removeFromTrolley" data-product-id="@item.Product.Id" style="width: 40px;">-</a>
-                            <a href="javascript:void(0);" class="btn btn-primary  addToTrolley" data-product-id="@item.Product.Id" style="width: 40px;">+</a>
+                            <a href="javascript:void(0);" class="btn btn-primary removeFromTrolley" data-product-id="@item.Product.Id">-</a>
+                            <a href="javascript:void(0);" class="btn btn-primary addToTrolley" data-product-id="@item.Product.Id">+</a>
                         </td>
                     </tr>
                 }
                 </tbody>
             </table>
             <p>Total: $@Model.CurrentTrolley.Total</p>
-            <a href="javascript:void(0);" class="btn btn-primary bg-green checkoutTrolley" data-trolley-id="@Model.CurrentTrolley.Id">Checkout</a>
+            <a href="javascript:void(0);" class="btn btn-primary checkoutTrolley" data-trolley-id="@Model.CurrentTrolley.Id">Checkout</a>
 
         </div>
     </div>

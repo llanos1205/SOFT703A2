@@ -19,10 +19,16 @@ public class ErrorController : Controller
     }
     
     [Route("Error/404")]
-    public IActionResult NotFoundError()
+    public IActionResult Error404()
     {
         // Return the custom 404 error view
         return View("E404");
+    }
+    
+    [Route("Error/_404")]
+    public IActionResult PartialError404()
+    {
+        return PartialView("_E404");
     }
 
     [Route("Error/500")]

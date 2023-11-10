@@ -12,11 +12,13 @@ public class MarketPlaceController : Controller
 {
     private readonly ILogger<MarketPlaceController> _logger;
     private readonly IMarketPlaceViewModel _marketPlaceViewModel;
+    private readonly IDetailMarketProductViewModel _detailMarketProduct;
 
-    public MarketPlaceController(IMarketPlaceViewModel vm, ILogger<MarketPlaceController> logger)
+    public MarketPlaceController(IMarketPlaceViewModel vm, ILogger<MarketPlaceController> logger,IDetailMarketProductViewModel dmp)
     {
         _logger = logger;
         _marketPlaceViewModel = vm;
+        _detailMarketProduct = dmp;
     }
 
     [CustomAuthorize]
@@ -57,6 +59,27 @@ public class MarketPlaceController : Controller
         {
             _logger.LogError(e.Message);
             return RedirectToAction("Error500", "Error");
+        }
+    }
+    public async Task<IActionResult> AddToTrolleyView(string id)
+    {
+        try
+        {
+            _logger.LogInformation("AddToTrolley called");
+            await _marketPlaceViewModel.AddToTrolley(id);
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                WriteIndented = true
+            };
+            string trolleyJson = JsonSerializer.Serialize(_marketPlaceViewModel.CurrentTrolley, options);
+            _logger.LogInformation("AddToTrolley completed");
+            return RedirectToAction("Index");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
         }
     }
 
@@ -160,5 +183,11 @@ public class MarketPlaceController : Controller
             _logger.LogError(ex.Message);
             return RedirectToAction("Error500", "Error");
         }
+    }
+
+    public async Task<IActionResult> Detail(string id)
+    {
+        await _detailMarketProduct.FindProduct(id);
+        return View(_detailMarketProduct);
     }
 }

@@ -2,21 +2,37 @@
 
     function renderCatalog(products) {
         var catalogContainer = $('#catalog-container');
-        catalogContainer.empty(); 
-
-        $.each(products, function (index, product) {
-            var card = '<div class="col-md-4 mb-4">' +
-                '<div class="card" style="width: 250px; height: 300px;">' +
-                '<img src="' + product.Photo + '" class="card-img-top" alt="Product Image" style="height: 190px;">' +
-                '<div class="card-body">' +
-                '<h6 class="card-title">' + product.Name + ' - $' + product.Price + '</h6>' +
-                '<h7 class="card-title">' + product.Category.Name +  '</h7>' +
-                '</div>' +
-                '<a href="javascript:void(0);" class="btn btn-primary addFromCatalog" data-product-id="' + product.Id + '">Add</a>' +
-                '</div>' +
-                '</div>';
-            catalogContainer.append(card);
-        });
+        catalogContainer.empty();
+        if (products.length == 0) {
+            $.ajax({
+                url: '/Error/_404',
+                type: 'GET',
+                success: function (data) {
+                    catalogContainer.html(data);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error('Error loading partial view:', textStatus, errorThrown);
+                }
+            });
+        } else {
+            $.each(products, function (index, product) {
+                var detailUrlWithId = productDetailMarketUrl + '/' + product.Id;
+                
+                var card = '<div class="col-md-4 mb-4">' +
+                    '<div class="card" style="width: 250px; height: 300px;">' +
+                    '<a href='+detailUrlWithId+'>' +
+                    '<img src="' + product.Photo + '" class="card-img-top" alt="Product Image" style="height: 190px;">' +
+                    '</a>' +
+                    '<div class="card-body">' +
+                    '<h6 class="card-title">' + product.Name + ' - $' + product.Price + '</h6>' +
+                    '<h7 class="card-title">' + product.Category.Name + '</h7>' +
+                    '</div>' +
+                    '<a href="javascript:void(0);" class="btn btn-primary addFromCatalog" data-product-id="' + product.Id + '">Add</a>' +
+                    '</div>' +
+                    '</div>';
+                catalogContainer.append(card);
+            });
+        }
     }
 
     $('#searchButton').click(function () {
