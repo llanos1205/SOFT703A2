@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Product;
 using SOFT703A2.Infrastructure.ViewModels.Product;
+using SOFT703A2.WebApp.Services;
 
 namespace SOFT703A2.WebApp.Controllers;
 
+[ServiceFilter(typeof(AdminAuthorizationFilter))]
 public class ProductController : Controller
 {
     private readonly IListProductViewModel _listProductViewModel;
@@ -20,8 +21,7 @@ public class ProductController : Controller
         _detailProductViewModel = detailProductViewModel;
         _logger = logger;
     }
-
-    [Authorize]
+    
     public async Task<IActionResult> List()
     {
         try
@@ -33,7 +33,7 @@ public class ProductController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -49,7 +49,7 @@ public class ProductController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -83,7 +83,7 @@ public class ProductController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -98,12 +98,11 @@ public class ProductController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> Add(CreateProductViewModel vm)
     {
         try
@@ -134,7 +133,7 @@ public class ProductController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -160,7 +159,7 @@ public class ProductController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -175,7 +174,7 @@ public class ProductController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 
@@ -190,7 +189,7 @@ public class ProductController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            return RedirectToAction("Error500", "Error");
         }
     }
 }

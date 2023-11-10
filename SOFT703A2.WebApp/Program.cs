@@ -1,9 +1,12 @@
 using SOFT703A2.Infrastructure;
+using SOFT703A2.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<AdminAuthorizationFilter>();
+builder.Services.AddScoped<CustomAuthorizeAttribute>();
 await builder.Services.AddInfrastructureServices(builder.Configuration);
 var app = builder.Build();
 
@@ -18,6 +21,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseStatusCodePagesWithReExecute("/Error/404");
 app.UseRouting();
 
 app.UseAuthentication();
