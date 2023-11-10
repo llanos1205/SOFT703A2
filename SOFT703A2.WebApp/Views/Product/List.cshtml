@@ -40,16 +40,15 @@
                 <td>@product.Price</td>
                 <td>@product.Category.Name</td>
                 <td>
-                    <a href="@Url.Action("Detail", "Product", new { id = product.Id })" class="btn btn-primary">Edit</a>
-                    <a href="@Url.Action("Delete", "Product", new { id = product.Id })" class="btn btn-danger">Delete</a>
-                    @if(product.IsPromoted)
+                    <a href="@Url.Action("Detail", "Product", new { id = product.Id })" class="btn btn-primary btn-custom">Edit</a>
+                    <a href="@Url.Action("Delete", "Product", new { id = product.Id })" class="btn btn-danger btn-custom">Delete</a>
+                    @if (product.IsPromoted)
                     {
-                        <a href="@Url.Action("UnPromote", "Product", new { id = product.Id })" class="btn btn-warning">Demote</a>
+                        <a href="@Url.Action("UnPromote", "Product", new { id = product.Id })" class="btn btn-warning btn-custom">Demote</a>
                     }
                     else
                     {
-                        <a href="@Url.Action("Promote", "Product", new { id = product.Id })" class="btn btn-success">Promote</a>
-                       
+                        <a href="@Url.Action("Promote", "Product", new { id = product.Id })" class="btn btn-success btn-custom">Promote</a>
                     }
                 </td>
             </tr>
