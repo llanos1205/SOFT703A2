@@ -59,6 +59,27 @@ public class MarketPlaceController : Controller
             throw;
         }
     }
+    public async Task<IActionResult> AddToTrolleyView(string id)
+    {
+        try
+        {
+            _logger.LogInformation("AddToTrolley called");
+            await _marketPlaceViewModel.AddToTrolley(id);
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                WriteIndented = true
+            };
+            string trolleyJson = JsonSerializer.Serialize(_marketPlaceViewModel.CurrentTrolley, options);
+            _logger.LogInformation("AddToTrolley completed");
+            return RedirectToAction("Index");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            throw;
+        }
+    }
 
     [HttpGet]
     [Authorize]
