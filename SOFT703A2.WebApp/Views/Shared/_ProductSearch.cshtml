@@ -5,12 +5,22 @@
             <input type="text" id="productName" class="form-control" placeholder="Search by Name">
         </div>
     </div>
-    <div class="col-md-1">
-        <button id="searchButton" class="btn btn-primary bg-green btn-custom" style="width: 70px;">Search</button>
-    </div>
-    <div class="col-md-1">
-        <a href="@Url.Action("Add", "Product")" class="btn btn-primary bg-green btn-custom" style="width: 70px;">Add</a>
-    </div>
+    @if (ViewBag.ShowAddButton)
+    {
+        <div class="col-md-1">
+            <button id="searchButton" class="btn btn-primary bg-green btn-custom" style="width: 70px;">Search</button>
+        </div>
+        <div class="col-md-1">
+            <a href="@Url.Action("Add", "Product")" class="btn btn-primary bg-green btn-custom" style="width: 70px;">Add</a>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-2">
+            <button id="searchButton" class="btn btn-primary bg-green btn-custom" style="width: 150px;">Search</button>
+        </div>
+    }
+
 </div>
 <div class="row">
     <div class="col-md-3">

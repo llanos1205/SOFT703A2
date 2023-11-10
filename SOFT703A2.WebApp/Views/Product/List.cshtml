@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+    ViewBag.ShowAddButton = true;
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -40,7 +41,7 @@
                 <td>@product.Price</td>
                 <td>@product.Category.Name</td>
                 <td>
-                    <a href="@Url.Action("Detail", "Product", new { id = product.Id })" class="btn btn-primary btn-custom">Edit</a>
+                    <a href="@Url.Action("Detail", "Product", new { id = product.Id })" class="btn btn-primary btn-custom">Detail</a>
                     <a href="@Url.Action("Delete", "Product", new { id = product.Id })" class="btn btn-danger btn-custom">Delete</a>
                     @if (product.IsPromoted)
                     {

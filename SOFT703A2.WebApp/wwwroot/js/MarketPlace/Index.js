@@ -141,8 +141,8 @@
                         '<td>' + item.Quantity + '</td>' +
                         '<td>' + (item.Quantity * item.Product.Price) + '</td>' +
                         '<td>' +
-                        '<a href="javascript:void(0);" class="btn btn-primary removeFromTrolley" data-product-id="' + item.ProductId + '">-</a>' +
-                        '<a href="javascript:void(0);" class="btn btn-primary addToTrolley" data-product-id="' + item.ProductId + '">+</a>' +
+                        '<a href="javascript:void(0);" class="btn btn-danger removeFromTrolley" data-product-id="' + item.ProductId + '" style="width: 40px">-</a>' +
+                        '<a href="javascript:void(0);" class="btn btn-primary addToTrolley" data-product-id="' + item.ProductId + '" style="width: 40px">+</a>' +
                         '</td>' +
                         '</tr>';
                     $tableBody.append(row);
