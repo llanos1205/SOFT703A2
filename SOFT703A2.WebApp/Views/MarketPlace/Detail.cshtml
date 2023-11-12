@@ -6,31 +6,59 @@
 }
 
 <h2>Details</h2>
-    <input type="hidden" asp-for="Id"/>
-    <div class="form-group">
-        <label asp-for="Name">Name</label>
-        <label asp-for="Name">@Model.Name</label>
-     
-    </div>
+<input type="hidden" asp-for="Id"/>
+<table>
+    <tr>
+        <td>
+            <table>
+                <tbody>
+                <tr>
+                    <td>
 
-    <div class="form-group">
-        <label asp-for="Photo">Photo</label>
-        <img src="@Model.Photo" />
-    </div>
-    <div class="form-group">
-            <label asp-for="CategoryName">Category</label>
-            <label asp-for="CategoryName">@Model.CategoryName</label>
+                        <strong>
+                            <label asp-for="Name">Name</label>
+                        </strong>
 
-        </div>
-    <div class="form-group">
-        <label asp-for="Price">Price</label>
-        <label asp-for="Price">@Model.Price</label>
-    </div>
-    <div class="form-group">
-        <label asp-for="Stock">Stock</label>
-        <label asp-for="Stock">@Model.Stock</label>
-    </div>
+                    </td>
+                    <td>
+                        <label asp-for="Name">@Model.Name</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <strong>
+                            <label asp-for="CategoryName">Category</label>
+                        </strong>
+
+                    </td>
+                    <td>
+                        <label asp-for="CategoryName">@Model.CategoryName</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <strong>
+                            <label asp-for="Price">Price</label>
+                        </strong>
+
+                    </td>
+                    <td>
+                        <label asp-for="Price">@Model.Price</label>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </td>
+        <td>
+            <div class="form-group">
+                <img src="@Model.Photo" style="width: 200px; height: 200px;"/>
+            </div>
+        </td>
+    </tr>
+</table>
 
 
-     <a href="@Url.Action("AddToTrolleyView", "MarketPlace", new { id = @Model.Id })" class="btn btn-danger">Add to trolley</a>
-
+<a href="@Url.Action("AddToTrolleyView", "MarketPlace", new { id = @Model.Id })" class="btn btn-primary bg-green">Add to trolley</a>

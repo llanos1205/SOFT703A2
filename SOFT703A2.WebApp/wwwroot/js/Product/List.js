@@ -28,7 +28,7 @@
                     '<td>' + product.Price + '</td>' +
                     '<td>' + product.Category.Name + '</td>' +
                     '<td>' +
-                    '<a href="' + detailUrl + '" class="btn btn-primary">Edit</a>  ' +
+                    '<a href="' + detailUrl + '" class="btn btn-primary">Detail</a>  ' +
                     '<a href="' + deleteUrl + '" class="btn btn-danger">Delete</a>  ';
 
                 if (product.IsPromoted) {

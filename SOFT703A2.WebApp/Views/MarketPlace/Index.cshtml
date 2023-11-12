@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+    ViewBag.ShowAddButton = false;
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -33,7 +34,7 @@
                             <h6 class="card-title">@product.Name - $@product.Price</h6>
                             <h7 class="card-title">@product.Category.Name</h7>
                         </div>
-                        <a href="javascript:void(0);" class="btn btn-primary addFromCatalog" data-product-id="@product.Id">Add</a>
+                        <a href="javascript:void(0);" class="btn btn-primary addFromCatalog bg-green" data-product-id="@product.Id">Add</a>
                     </div>
                 </div>
             }
@@ -62,15 +63,15 @@
                         <td>@item.Quantity</td>
                         <td>@(item.Quantity * item.Product.Price)</td>
                         <td>
-                            <a href="javascript:void(0);" class="btn btn-primary removeFromTrolley" data-product-id="@item.Product.Id">-</a>
-                            <a href="javascript:void(0);" class="btn btn-primary addToTrolley" data-product-id="@item.Product.Id">+</a>
+                            <a href="javascript:void(0);" class="btn btn-danger removeFromTrolley" data-product-id="@item.Product.Id" style="width: 40px">-</a>
+                            <a href="javascript:void(0);" class="btn btn-primary addToTrolley" data-product-id="@item.Product.Id" style="width: 40px">+</a>
                         </td>
                     </tr>
                 }
                 </tbody>
             </table>
             <p>Total: $@Model.CurrentTrolley.Total</p>
-            <a href="javascript:void(0);" class="btn btn-primary checkoutTrolley" data-trolley-id="@Model.CurrentTrolley.Id">Checkout</a>
+            <a href="javascript:void(0);" class="btn btn-primary checkoutTrolley btn-custom bg-green" data-trolley-id="@Model.CurrentTrolley.Id" style="width: 350px">Checkout</a>
 
         </div>
     </div>
