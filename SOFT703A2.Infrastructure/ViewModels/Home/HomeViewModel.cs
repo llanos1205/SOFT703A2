@@ -23,6 +23,20 @@ public class HomeViewModel : IHomeViewModel
     public async Task Load()
     {
         PromotedProducts = await _productRepository.GetAllWithCategoriesAsync();
-        PromotedProducts = PromotedProducts.Where(x => x.IsPromoted).ToList();
+        if (PromotedProducts != null)
+        {
+            if (PromotedProducts.Count != 0)
+            {
+                PromotedProducts = PromotedProducts.Where(p => p.IsPromoted).ToList();
+            }
+            else
+            {
+                PromotedProducts = new List<Product>();
+            }
+        }
+        else
+        {
+            PromotedProducts = new List<Product>();
+        }
     }
 }
