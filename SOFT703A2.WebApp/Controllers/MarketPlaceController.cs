@@ -14,7 +14,8 @@ public class MarketPlaceController : Controller
     private readonly IMarketPlaceViewModel _marketPlaceViewModel;
     private readonly IDetailMarketProductViewModel _detailMarketProduct;
 
-    public MarketPlaceController(IMarketPlaceViewModel vm, ILogger<MarketPlaceController> logger,IDetailMarketProductViewModel dmp)
+    public MarketPlaceController(IMarketPlaceViewModel vm, ILogger<MarketPlaceController> logger,
+        IDetailMarketProductViewModel dmp)
     {
         _logger = logger;
         _marketPlaceViewModel = vm;
@@ -61,6 +62,7 @@ public class MarketPlaceController : Controller
             return RedirectToAction("Error500", "Error");
         }
     }
+
     public async Task<IActionResult> AddToTrolleyView(string id)
     {
         try
@@ -185,6 +187,7 @@ public class MarketPlaceController : Controller
         }
     }
 
+    [CustomAuthorize]
     public async Task<IActionResult> Detail(string id)
     {
         await _detailMarketProduct.FindProduct(id);

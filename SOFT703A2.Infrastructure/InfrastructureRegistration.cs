@@ -17,6 +17,8 @@ using SOFT703A2.Infrastructure.ViewModels.Trolley;
 using SOFT703A2.Infrastructure.ViewModels.User;
 using Serilog;
 using Serilog.Filters;
+using SOFT703A2.Infrastructure.Contracts.ViewModels.Home;
+using SOFT703A2.Infrastructure.ViewModels.Home;
 
 namespace SOFT703A2.Infrastructure;
 
@@ -62,6 +64,7 @@ public static class InfrastructureRegistration
         services.AddScoped<IMarketPlaceViewModel, MarketPlaceViewModel>();
         services.AddScoped<ITrolleyViewModel, TrolleyViewModel>();
         services.AddScoped<IDetailMarketProductViewModel, DetailMarketProductViewModel>();
+        services.AddScoped<IHomeViewModel, HomeViewModel>();
     }
 
     private static void LoadLogging(IServiceCollection services)
