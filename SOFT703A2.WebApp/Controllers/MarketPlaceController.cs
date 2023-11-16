@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SOFT703A2.Infrastructure.Commands;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Catalog;
 using SOFT703A2.WebApp.Services;
 
@@ -164,12 +165,12 @@ public class MarketPlaceController : Controller
     [HttpGet]
     [CustomAuthorize]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> FilterProducts(string productName, bool categoryCheckbox, bool promotedCheckbox)
+    public async Task<IActionResult> FilterProducts([FromQuery] ProductSearchCommand command)
     {
         try
         {
             _logger.LogInformation("FilterProducts called");
-            await _marketPlaceViewModel.UpdateCatalog(productName, categoryCheckbox, promotedCheckbox);
+            await _marketPlaceViewModel.UpdateCatalog(command.productName, command.categoryCheckbox, command.promotedCheckbox, command.sortBy);
 
             var options = new JsonSerializerOptions
             {
