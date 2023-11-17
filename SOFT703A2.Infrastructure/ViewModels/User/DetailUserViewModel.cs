@@ -14,7 +14,7 @@ public class DetailUserViewModel : IDetailUserViewModel
     [Required] public string? LastName { get; set; }
     [Required] public string? PhoneNumber { get; set; }
     [Required] public string? Email { get; set; }
-    public string? SelectedRole { get; set; }
+    [Required] public string? SelectedRole { get; set; }
     public List<DropdownOption>? Roles { get; set; }
     public List<Trolley>? Trolleys { get; set; }
 

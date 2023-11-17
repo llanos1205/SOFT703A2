@@ -83,7 +83,9 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     public async Task SetRole(string email, string roleName)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        await _userManager.AddToRoleAsync(user, roleName);
+        var roles = await _userManager.GetRolesAsync(user);
+        await _userManager.RemoveFromRolesAsync(user, roles);
+        var result = await _userManager.AddToRoleAsync(user, roleName);
     }
 
     public async Task AddDefaultAsync(User user, string? password)

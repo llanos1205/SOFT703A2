@@ -45,13 +45,13 @@
                 <td>
                     <div class="form-group">
                         <label asp-for="SelectedRole">Role</label>
-                        <select asp-for="SelectedRole" class="form-control" id="SelectedCategoryId">
+                        <select asp-for="SelectedRole" class="form-control" id="SelectedRole">
                             @foreach (var role in Model.Roles)
                             {
                                 <option value="@role.Value">@role.Text</option>
                             }
                         </select>
-                        <span asp-validation-for="Roles" class="text-danger"></span>
+                        <span asp-validation-for="SelectedRole" class="text-danger"></span>
                     </div>
                 </td>
             </tr>

@@ -1,4 +1,5 @@
-﻿using SOFT703A2.Infrastructure.Contracts.Repositories;
+﻿using System.ComponentModel.DataAnnotations;
+using SOFT703A2.Infrastructure.Contracts.Repositories;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.User;
 using SOFT703A2.Infrastructure.ViewModels.Shared;
 
@@ -8,13 +9,12 @@ using SOFT703A2.Domain.Models;
 
 public class CreateUserViewModel : ICreateUserViewModel
 {
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
-    public string? PhoneNumber { get; set; }
-    public string? Email { get; set; }
-
-    public string? SelectedRole { get; set; }
-    public List<DropdownOption> Roles { get; set; }
+    [Required] public string? FirstName { get; set; }
+    [Required] public string? LastName { get; set; }
+    [Required] public string? PhoneNumber { get; set; }
+    [Required] public string? Email { get; set; }
+    [Required] public string? SelectedRole { get; set; }
+    public List<DropdownOption>? Roles { get; set; }
 
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
@@ -39,7 +39,8 @@ public class CreateUserViewModel : ICreateUserViewModel
             Email = Email,
             UserName = Email,
         }, "Password123!");
-        await _userRepository.SetRole(Email, await _roleRepository.GetRoleId(SelectedRole));
+        var role = await _roleRepository.GetByIdAsync(SelectedRole);
+        await _userRepository.SetRole(Email, role.Name);
     }
 
     public async Task LoadRoles()
