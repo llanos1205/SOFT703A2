@@ -8,7 +8,7 @@ namespace SOFT703A2.Infrastructure.ViewModels.Product;
 public class DetailProductViewModel : IDetailProductViewModel
 {
     [Required] public string? Id { get; set; }
-    [Required] public string? Name { get; set; }
+    [Required] [MaxLength(64)] public string? Name { get; set; }
     [Required] public string? Photo { get; set; }
     [Required] public int Stock { get; set; }
     [Required] public double Price { get; set; }
