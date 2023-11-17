@@ -1,4 +1,5 @@
-﻿using SOFT703A2.Infrastructure.Contracts.Repositories;
+﻿using Microsoft.IdentityModel.Tokens;
+using SOFT703A2.Infrastructure.Contracts.Repositories;
 
 namespace SOFT703A2.Infrastructure.ViewModels.Catalog;
 
@@ -33,9 +34,27 @@ public class MarketPlaceViewModel : IMarketPlaceViewModel
         CurrentTrolley = await _trolleyRepository.GetLatest(_userRepository.GetUserId());
     }
 
-    public async Task UpdateCatalog(string productName, bool byCategory, bool byPromoted)
+    public async Task UpdateCatalog(string productName, bool byCategory, bool byPromoted, string orderBy)
     {
         Catalog = await _productRepository.GetExtendedSearch(productName, byCategory, byPromoted);
+        if (!string.IsNullOrEmpty(orderBy) && !Catalog.IsNullOrEmpty())
+        {
+            switch (orderBy)
+            {
+                case "nameSort":
+                    Catalog = Catalog.OrderBy(p => p.Name).ToList();
+                    break;
+                case "toHighestPriceSort":
+                    Catalog = Catalog.OrderBy(p => p.Price).ToList();
+                    break;
+                case "toLowestPriceSort":
+                    Catalog = Catalog.OrderByDescending(p => p.Price).ToList();
+                    break;
+                case "categorySort":
+                    Catalog = Catalog.OrderBy(p => p.Category.Name).ToList();
+                    break;
+            }
+        }
     }
 
     public async Task AddToTrolley(string productId)

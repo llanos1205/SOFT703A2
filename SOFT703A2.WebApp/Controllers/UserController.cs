@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SOFT703A2.Infrastructure.Commands;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.User;
 using SOFT703A2.Infrastructure.ViewModels.User;
 using SOFT703A2.WebApp.Services;
@@ -159,13 +160,12 @@ public class UserController : Controller
 
     [HttpGet]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> FilterUsers(string userName, bool visitsCheckbox, bool emailCheckbox,
-        bool phoneCheckbox)
+    public async Task<IActionResult> FilterUsers([FromQuery]UserSearchCommand command)
     {
         try
         {
             _logger.LogInformation("FilterUsers called");
-            await _listUserViewModel.UpdateUsersList(userName, visitsCheckbox, emailCheckbox, phoneCheckbox);
+            await _listUserViewModel.UpdateUsersList(command.userName, command.visitsCheckbox, command.emailCheckbox, command.phoneCheckbox, command.sortBy);
 
             var options = new JsonSerializerOptions
             {

@@ -46,14 +46,27 @@
     <div class="col-md-2">
     </div>
     <div class="col-md-1">
-        <button id="sortButton" class="btn btn-primary bg-green btn-custom" style="width: 70px;">Sort</button>
+        <div class="dropdown">
+            <button id="sortButton" class="btn text-white bg-green btn-custom dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 70px;">Sort</button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item text-dark" id="nameSort" href="#">Surname</a>
+                </li>
+                <li>
+                    <a class="dropdown-item text-dark" id="loginSort" href="#">Login count</a>
+                </li>
+                <li>
+                    <a class="dropdown-item text-dark" id="usernameSort" href="#">Username</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 <div class="row">
     <table class="table">
         <thead>
         <tr>
- 
+
             <th>Username</th>
             <th>Email</th>
             <th>Phone</th>
@@ -66,7 +79,7 @@
         @foreach (var users in Model.Users)
         {
             <tr>
-         
+
                 <td>@users.UserName</td>
                 <td>@users.Email</td>
                 <td>@users.PhoneNumber</td>
