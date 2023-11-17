@@ -79,7 +79,7 @@ public class ProductController : Controller
             }
 
             await _detailProductViewModel.LoadCategories();
-            return RedirectToAction("Detail");
+            return View("Detail", _detailProductViewModel);
         }
         catch (Exception e)
         {
@@ -130,7 +130,7 @@ public class ProductController : Controller
             }
 
             await _createProductViewModel.LoadCategories();
-            return View(vm);
+            return View(_createProductViewModel);
         }
         catch (Exception e)
         {
