@@ -82,7 +82,8 @@ public class UserController : Controller
                 }
             }
 
-            return RedirectToAction("Detail");
+            await _detailUserViewModel.LoadRoles();
+            return View("Detail", _detailUserViewModel);
         }
         catch (Exception e)
         {
@@ -118,11 +119,13 @@ public class UserController : Controller
                 _createUserViewModel.LastName = vm.LastName;
                 _createUserViewModel.PhoneNumber = vm.PhoneNumber;
                 _createUserViewModel.Email = vm.Email;
+                _createUserViewModel.SelectedRole = vm.SelectedRole;
                 await _createUserViewModel.Create();
                 _logger.LogInformation("Add completed");
                 return RedirectToAction("List");
             }
 
+            await _createUserViewModel.LoadRoles();
             return View(_createUserViewModel);
         }
         catch (Exception e)
@@ -160,12 +163,13 @@ public class UserController : Controller
 
     [HttpGet]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> FilterUsers([FromQuery]UserSearchCommand command)
+    public async Task<IActionResult> FilterUsers([FromQuery] UserSearchCommand command)
     {
         try
         {
             _logger.LogInformation("FilterUsers called");
-            await _listUserViewModel.UpdateUsersList(command.userName, command.visitsCheckbox, command.emailCheckbox, command.phoneCheckbox, command.sortBy);
+            await _listUserViewModel.UpdateUsersList(command.userName, command.visitsCheckbox, command.emailCheckbox,
+                command.phoneCheckbox, command.sortBy);
 
             var options = new JsonSerializerOptions
             {

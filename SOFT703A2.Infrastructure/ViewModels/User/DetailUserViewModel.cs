@@ -10,11 +10,16 @@ using SOFT703A2.Domain.Models;
 public class DetailUserViewModel : IDetailUserViewModel
 {
     [Required] public string? Id { get; set; }
-    [Required] public string? FirstName { get; set; }
-    [Required] public string? LastName { get; set; }
-    [Required] public string? PhoneNumber { get; set; }
-    [Required] public string? Email { get; set; }
-    public string? SelectedRole { get; set; }
+    [Required] [MaxLength(64)] public string? FirstName { get; set; }
+    [Required] [MaxLength(64)] public string? LastName { get; set; }
+
+    [Required]
+    [MaxLength(64)]
+    [RegularExpression(@"^[0-9]+$", ErrorMessage = "Please enter valid phone number")]
+    public string? PhoneNumber { get; set; }
+
+    [Required] [EmailAddress] public string? Email { get; set; }
+    [Required] public string? SelectedRole { get; set; }
     public List<DropdownOption>? Roles { get; set; }
     public List<Trolley>? Trolleys { get; set; }
 

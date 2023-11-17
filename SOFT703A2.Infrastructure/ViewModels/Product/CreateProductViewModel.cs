@@ -9,7 +9,7 @@ using SOFT703A2.Domain.Models;
 
 public class CreateProductViewModel : ICreateProductViewModel
 {
-    [Required] public string? Name { get; set; }
+    [Required] [MaxLength(64)]public string? Name { get; set; }
     [Required] public string? Photo { get; set; }
     [Required] public bool IsPromoted { get; set; }
     [Required] public int Stock { get; set; }
