@@ -31,7 +31,7 @@ public class ListUserViewModel:IListUserViewModel
                     Users = Users.OrderBy(p => p.LastName).ToList();
                     break;
                 case "loginSort":
-                    Users = Users.OrderBy(p => p.Logins.Count).ToList();
+                    Users = Users.OrderByDescending(p => p.Logins.Count).ToList();
                     break;
                 case "usernameSort":
                     Users = Users.OrderBy(p => p.UserName).ToList();

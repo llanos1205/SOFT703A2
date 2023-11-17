@@ -64,16 +64,12 @@
         }
 
     }
-    $('#toHighestPriceSort').click(function () {
-        sortBy('toHighestPriceSort');
+    $('#loginSort').click(function () {
+        sortBy('loginSort');
     });
 
-    $('#toLowestPriceSort').click(function () {
-        sortBy('toLowestPriceSort');
-    });
-
-    $('#categorySort').click(function () {
-        sortBy('categorySort');
+    $('#usernameSort').click(function () {
+        sortBy('usernameSort');
     });
 
     $('#nameSort').click(function () {
