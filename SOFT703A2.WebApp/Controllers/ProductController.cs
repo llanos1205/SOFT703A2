@@ -21,7 +21,7 @@ public class ProductController : Controller
         _detailProductViewModel = detailProductViewModel;
         _logger = logger;
     }
-    
+
     public async Task<IActionResult> List()
     {
         try
@@ -78,6 +78,7 @@ public class ProductController : Controller
                 }
             }
 
+            await _detailProductViewModel.LoadCategories();
             return RedirectToAction("Detail");
         }
         catch (Exception e)
@@ -128,6 +129,7 @@ public class ProductController : Controller
                 }
             }
 
+            await _createProductViewModel.LoadCategories();
             return View(vm);
         }
         catch (Exception e)
