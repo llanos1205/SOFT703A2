@@ -1,82 +1,69 @@
-﻿$(document).ready(function () {
-    function sortBy(opt) {
-        var userName = $('#userName').val();
-        var visitsCheckbox = $('#visitsCheckbox').is(':checked');
-        var emailCheckbox = $('#emailCheckbox').is(':checked');
-        var phoneCheckbox = $('#phoneCheckbox').is(':checked');
+﻿$(document).ready(() => {
+    const sortBy = (opt) => {
+        const userName = $('#userName').val();
+        const visitsCheckbox = $('#visitsCheckbox').is(':checked');
+        const emailCheckbox = $('#emailCheckbox').is(':checked');
+        const phoneCheckbox = $('#phoneCheckbox').is(':checked');
+        const token = $('input[name="__RequestVerificationToken"]').val();
 
-        var token = $('input[name="__RequestVerificationToken"]').val();
         $.ajax({
             url: filterUsersPath,
             type: 'GET',
             data: {
-                userName: userName,
-                visitsCheckbox: visitsCheckbox,
-                emailCheckbox: emailCheckbox,
-                phoneCheckbox: phoneCheckbox,
+                userName,
+                visitsCheckbox,
+                emailCheckbox,
+                phoneCheckbox,
                 sortBy: opt
             },
             headers: {
                 RequestVerificationToken: token
             },
-            success: function (data) {
-                renderUserList(data); // Update the catalog with filtered products
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
+            success: renderUserList,
+            error: (xhr) => alert('An error occurred while fetching the users.')
         });
-    }
+    };
 
-    function renderUserList(users) {
-        var tableBody = $('#user-table-body');
-        tableBody.empty(); // Clear the existing product list
-        if (users.length == 0) {
+    const createUserRow = (user) => {
+        const detailUrl = `${detailsPath}/${user.Id}`;
+        const deleteUrl = `${deletePath}/${user.Id}`;
+
+        return `<tr>
+            <td>${user.UserName}</td>
+            <td>${user.Email}</td>
+            <td>${user.PhoneNumber}</td>
+            <td>${user.FirstName}</td>
+            <td>${user.LastName}</td>
+            <td>${user.Logins.length}</td>
+            <td>
+                <a href="${detailUrl}" class="btn btn-primary">Detail</a>
+                <a href="${deleteUrl}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>`;
+    };
+
+    const renderUserList = (users) => {
+        const tableBody = $('#user-table-body');
+        tableBody.empty();
+
+        if (users.length === 0) {
             $.ajax({
                 url: '/Error/_404',
                 type: 'GET',
-                success: function (data) {
-                    tableBody.html(data);
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    console.error('Error loading partial view:', textStatus, errorThrown);
-                }
+                success: (data) => tableBody.html(data),
+                error: () => alert('An error occurred while loading the error page.')
             });
         } else {
-            $.each(users, function (index, user) {
-                var detailUrl = detailsPath + '/' + user.Id;
-                var deleteUrl = deletePath + '/' + user.Id;
-
-                var row = '<tr>' +
-                    '<td>' + user.UserName + '</td>' +
-                    '<td>' + user.Email + '</td>' +
-                    '<td>' + user.PhoneNumber + '</td>' +
-                    '<td>' + user.FirstName + '</td>' +
-                    '<td>' + user.LastName + '</td>' +
-                    '<td>' + user.Logins.length + '</td>' +
-                    '<td>' +
-                    '<a href="' + detailUrl + '" class="btn btn-primary">Detail</a>  ' +
-                    '<a href="' + deleteUrl + '" class="btn btn-danger">Delete</a>  ' +
-                    '</td>' +
-                    '</tr>';
-                tableBody.append(row);
-            });
+            users.forEach((user) => tableBody.append(createUserRow(user)));
         }
+    };
 
-    }
-    $('#loginSort').click(function () {
-        sortBy('loginSort');
-    });
+    const assignClickHandler = (id, sortType) => {
+        $(`#${id}`).click(() => sortBy(sortType));
+    };
 
-    $('#usernameSort').click(function () {
-        sortBy('usernameSort');
-    });
-
-    $('#nameSort').click(function () {
-        sortBy('nameSort');
-    });
-
-    $('#searchButton').click(function () {
-        sortBy();
-    });
+    assignClickHandler('loginSort', 'loginSort');
+    assignClickHandler('usernameSort', 'usernameSort');
+    assignClickHandler('nameSort', 'nameSort');
+    assignClickHandler('searchButton');
 });
