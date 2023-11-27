@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SOFT703A2.Infrastructure.Contracts.ViewModels.Product;
+using SOFT703A2.Infrastructure.RequestModels;
 using SOFT703A2.Infrastructure.ViewModels.Product;
 using SOFT703A2.WebApp.Services;
 
@@ -165,33 +169,51 @@ public class ProductController : Controller
         }
     }
 
-    public async Task<IActionResult> Promote(string id)
+    [HttpPost]
+    [Consumes("application/json")]
+    public async Task<IActionResult> Promote([FromBody] IdModel model)
     {
         try
         {
             _logger.LogInformation("Promote called");
-            await _detailProductViewModel.Promote(id);
-            return RedirectToAction("List");
+            await _detailProductViewModel.Promote(model.Id);
+            await _listProductViewModel.GetAll();
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                WriteIndented = true
+            };
+            string productsJson = JsonSerializer.Serialize(_listProductViewModel.Products, options);
+            return Content(productsJson, "application/json");
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return RedirectToAction("Error500", "Error");
+            return NotFound();
         }
     }
 
-    public async Task<IActionResult> UnPromote(string id)
+    [HttpPost]
+    [Consumes("application/json")]
+    public async Task<IActionResult> UnPromote([FromBody] IdModel model)
     {
         try
         {
             _logger.LogInformation("UnPromote called");
-            await _detailProductViewModel.UnPromote(id);
-            return RedirectToAction("List");
+            await _detailProductViewModel.UnPromote(model.Id);
+            await _listProductViewModel.GetAll();
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                WriteIndented = true
+            };
+            string productsJson = JsonSerializer.Serialize(_listProductViewModel.Products, options);
+            return Content(productsJson, "application/json");
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return RedirectToAction("Error500", "Error");
+            return NotFound();
         }
     }
 }

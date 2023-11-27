@@ -1,88 +1,83 @@
-﻿$(document).ready(function () {
-    function sortBy(opt) {
-        var productName = $('#productName').val();
-        var categoryCheckbox = $('#categoryCheckbox').is(':checked');
-        var promotedCheckbox = $('#promotedCheckbox').is(':checked');
+﻿$(document).ready(() => {
+    const sortBy = (opt) => {
+        const productName = $('#productName').val();
+        const categoryCheckbox = $('#categoryCheckbox').is(':checked');
+        const promotedCheckbox = $('#promotedCheckbox').is(':checked');
+        const token = $('input[name="__RequestVerificationToken"]').val();
 
-        var token = $('input[name="__RequestVerificationToken"]').val();
         $.ajax({
             url: filterProductsPath,
             type: 'GET',
             data: {
-                productName: productName,
-                categoryCheckbox: categoryCheckbox,
-                promotedCheckbox: promotedCheckbox,
+                productName,
+                categoryCheckbox,
+                promotedCheckbox,
                 sortBy: opt
             },
             headers: {
                 RequestVerificationToken: token
             },
-            success: function (data) {
-                renderCatalog(data); // Update the catalog with filtered products
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
+            success: renderCatalog,
+            error: (xhr) => alert('An error occurred while fetching the products.')
         });
-    }
-    function renderCatalog(products) {
-        var tableBody = $('#product-table-body');
-        tableBody.empty(); // Clear the existing product list
-        if (products.length == 0) {
+    };
+
+    const createRow = (product) => {
+        const detailUrl = `${productDetailPath}/${product.Id}`;
+        const deleteUrl = `${productDeletePath}/${product.Id}`;
+
+        return `<tr>
+        <td>${product.Name}</td>
+        <td><img src="${product.Photo}" width="100" height="100" /></td>
+        <td>${product.Stock}</td>
+        <td>${product.Price}</td>
+        <td>${product.Category.Name}</td>
+        <td>
+            <a href="${detailUrl}" class="btn btn-primary">Detail</a>
+            <a href="${deleteUrl}" class="btn btn-danger">Delete</a>
+            <button class="btn ${product.IsPromoted ? 'btn-warning' : 'btn-success'}" onclick="setPromotion('${product.Id}', ${product.IsPromoted})">${product.IsPromoted ? 'Demote' : 'Promote'}</button>
+        </td>
+    </tr>`;
+    };
+
+    const renderCatalog = (products) => {
+        const tableBody = $('#product-table-body');
+        tableBody.empty();
+
+        if (products.length === 0) {
             $.ajax({
                 url: '/Error/_404',
                 type: 'GET',
-                success: function (data) {
-                    tableBody.html(data);
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    console.error('Error loading partial view:', textStatus, errorThrown);
-                }
+                success: (data) => tableBody.html(data),
+                error: () => alert('An error occurred while loading the error page.')
             });
         } else {
-            $.each(products, function (index, product) {
-                var detailUrl = productDetailPath + '/' + product.Id;
-                var deleteUrl = productDeletePath + '/' + product.Id;
-                var promoteUrl = productPromotePath + '/' + product.Id;
-                var unPromoteUrl = productUnPromotePath + '/' + product.Id;
-                var row = '<tr>' +
-                    '<td>' + product.Name + '</td>' +
-                    '<td><img src="' + product.Photo + '" width="100" height="100" /></td>' +
-                    '<td>' + product.Stock + '</td>' +
-                    '<td>' + product.Price + '</td>' +
-                    '<td>' + product.Category.Name + '</td>' +
-                    '<td>' +
-                    '<a href="' + detailUrl + '" class="btn btn-primary">Detail</a>  ' +
-                    '<a href="' + deleteUrl + '" class="btn btn-danger">Delete</a>  ';
-
-                if (product.IsPromoted) {
-                    row += '<a href="' + unPromoteUrl + '" class="btn btn-warning">Demote</a>  ';
-                } else {
-                    row += '<a href="' + promoteUrl + '" class="btn btn-success">Promote</a>';
-                }
-                row += '</td>' +
-                    '</tr>';
-                tableBody.append(row);
-            });
+            products.forEach((product) => tableBody.append(createRow(product)));
         }
+    };
+
+    window.setPromotion = (id, isPromoted) => {
+        const token = $('input[name="__RequestVerificationToken"]').val();
+
+        $.ajax({
+            url: isPromoted ? productUnPromotePath : productPromotePath,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({Id: id}),
+            headers: {
+                RequestVerificationToken: token
+            },
+            success: renderCatalog,
+            error: () => alert('An error occurred while setting the promotion.')
+        });
     }
-    $('#toHighestPriceSort').click(function () {
-        sortBy('toHighestPriceSort');
-    });
+    const assignClickHandler = (id, sortType) => {
+        $(`#${id}`).click(() => sortBy(sortType));
+    };
 
-    $('#toLowestPriceSort').click(function () {
-        sortBy('toLowestPriceSort');
-    });
-    
-    $('#categorySort').click(function () {
-        sortBy('categorySort');
-    });
-
-    $('#nameSort').click(function () {
-        sortBy('nameSort');
-    });
-    
-    $('#searchButton').click(function () {
-        sortBy();
-    });
+    assignClickHandler('toHighestPriceSort', 'toHighestPriceSort');
+    assignClickHandler('toLowestPriceSort', 'toLowestPriceSort');
+    assignClickHandler('categorySort', 'categorySort');
+    assignClickHandler('nameSort', 'nameSort');
+    assignClickHandler('searchButton');
 });
